@@ -8,10 +8,10 @@ export default function TabsLayout() {
     <>
       <Tabs
         screenOptions={{
-          sceneStyle: styles.scene,
+          sceneStyle: style.scene,
           headerShown: false,
-          tabBarStyle: styles.tabBar,
-          tabBarItemStyle: { transform: [{ translateY: 8 }] },
+          tabBarStyle: style.tabBar,
+          tabBarItemStyle: { paddingTop: 8 },
           tabBarLabelStyle: { fontFamily: "SpaceMono" },
           tabBarActiveTintColor: colors.zinc[100],
           tabBarInactiveTintColor: colors.zinc[500],
@@ -40,14 +40,14 @@ export default function TabsLayout() {
           ></Tabs.Screen>
         ))}
       </Tabs>
-      <TouchableOpacity style={styles.addButton}>
+      <TouchableOpacity style={style.addButton}>
         <MaterialIcons name="add" size={20}></MaterialIcons>
       </TouchableOpacity>
     </>
   );
 }
 
-const styles = StyleSheet.create({
+const style = StyleSheet.create({
   scene: {
     backgroundColor: "rgba(0 0 0 / 0)",
     paddingHorizontal: 25,

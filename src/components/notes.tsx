@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { FontAwesome } from "./icons";
 import { styles } from "@/styles";
-import { longDate } from "@/utils";
+import { shortDate } from "@/utils";
 
 type NotesListProps = {
   notes: Note[];
@@ -54,7 +54,7 @@ function NoteText({ note, dates }: { note: Note; dates?: boolean }) {
           style={{ transform: [{ translateY: -2 }] }}
         ></FontAwesome>
       ) : (
-        <Text>{longDate(note.epoch).replaceAll(",", ":").split(" ")[1]}</Text>
+        <Text>{shortDate(note.epoch).split("/")[1]}:</Text>
       )}
       <Text>{note.text}</Text>
     </TouchableOpacity>
