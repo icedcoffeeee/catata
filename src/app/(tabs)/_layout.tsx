@@ -18,20 +18,20 @@ export default function TabsLayout() {
         }}
       >
         {[
-          ["year", "Year", "star-sharp"],
-          ["month", "Month", "moon-sharp"],
-          ["index", "Today", "sunny-sharp"],
-          ["search", "Search", "search-sharp"],
-          ["settings", "Settings", "settings-sharp"],
+          ["year", "Year", "star"],
+          ["month", "Month", "moon"],
+          ["index", "Today", "sunny"],
+          ["search", "Search", "search"],
+          ["settings", "Settings", "settings"],
         ].map((p) => (
           <Tabs.Screen
             name={p[0]}
             key={p[0]}
             options={{
               title: p[1],
-              tabBarIcon: ({ color, size }) => (
+              tabBarIcon: ({ color, size, focused }) => (
                 <IonIcons
-                  name={p[2] as IonGlyphs}
+                  name={(p[2] + (focused ? "-sharp" : "-outline")) as IonGlyphs}
                   color={color}
                   size={0.8 * size}
                 ></IonIcons>
