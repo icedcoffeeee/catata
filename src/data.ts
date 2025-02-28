@@ -35,7 +35,7 @@ export const getNotes: () => Note[] = () => [
   },
   {
     id: 4,
-    text: "Sub Note",
+    text: "Long Long Long Long Long Long Long Long Long Long Long Sub Note",
     epoch: new Date().getTime(),
     type: NoteType.DAY,
     subnoteIDs: [],

@@ -45,10 +45,14 @@ export function NotesList({ notes, dates, style }: NotesListProps) {
 function NoteText({ note, dates }: { note: Note; dates?: boolean }) {
   return (
     <TouchableOpacity
-      style={{ flexDirection: "row", alignItems: "center", gap: 10 }}
+      style={{ flexDirection: "row", alignItems: "baseline", gap: 10 }}
     >
       {!dates ? (
-        <FontAwesome name="circle" size={5}></FontAwesome>
+        <FontAwesome
+          name="minus"
+          size={5}
+          style={{ transform: [{ translateY: -2 }] }}
+        ></FontAwesome>
       ) : (
         <Text>{longDate(note.epoch).replaceAll(",", ":").split(" ")[1]}</Text>
       )}
