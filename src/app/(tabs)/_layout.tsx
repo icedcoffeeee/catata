@@ -21,8 +21,8 @@ export default function TabsLayout() {
           ["year", "Year", "star"],
           ["month", "Month", "moon"],
           ["index", "Today", "sunny"],
-          ["search", "Search", "search"],
-          ["settings", "Settings", "settings"],
+          ["archive", "Archive", "archive"],
+          ["menu", "Menu", "menu"],
         ].map((p) => (
           <Tabs.Screen
             name={p[0]}
