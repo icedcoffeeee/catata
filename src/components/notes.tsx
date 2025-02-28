@@ -9,9 +9,14 @@ import {
 } from "react-native";
 import { FontAwesome } from "./icons";
 import { styles } from "@/styles";
+import { longDate } from "@/utils";
 
-type NotesListProps = { notes: Note[]; style?: StyleProp<ViewStyle> };
-export function NotesList({ notes, style }: NotesListProps) {
+type NotesListProps = {
+  notes: Note[];
+  dates?: boolean;
+  style?: StyleProp<ViewStyle>;
+};
+export function NotesList({ notes, dates, style }: NotesListProps) {
   return (
     <FlatList
       data={notes.filter((a) =>
@@ -21,7 +26,7 @@ export function NotesList({ notes, style }: NotesListProps) {
       keyExtractor={(n) => n.id.toString()}
       renderItem={({ item: n }) => (
         <View style={style}>
-          <NoteText note={n}></NoteText>
+          <NoteText note={n} dates={dates}></NoteText>
           {n.subnoteIDs.length !== 0 && (
             <View style={{ marginLeft: 20 }}>
               <NotesList
@@ -37,12 +42,16 @@ export function NotesList({ notes, style }: NotesListProps) {
   );
 }
 
-function NoteText({ note }: { note: Note }) {
+function NoteText({ note, dates }: { note: Note; dates?: boolean }) {
   return (
     <TouchableOpacity
       style={{ flexDirection: "row", alignItems: "center", gap: 10 }}
     >
-      <FontAwesome name="circle" size={5}></FontAwesome>
+      {!dates ? (
+        <FontAwesome name="circle" size={5}></FontAwesome>
+      ) : (
+        <Text>{longDate(note.epoch).replaceAll(",", ":").split(" ")[1]}</Text>
+      )}
       <Text>{note.text}</Text>
     </TouchableOpacity>
   );

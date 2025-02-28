@@ -35,9 +35,9 @@ export default function YearPage() {
               }}
             >
               <TouchableOpacity>
-                <Text>{month}</Text>
+                <Text style={{ marginBottom: 5 }}>{month}</Text>
               </TouchableOpacity>
-              <NotesList notes={notes}></NotesList>
+              <NotesList notes={notes} dates></NotesList>
             </View>
           );
         }}
