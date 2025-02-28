@@ -41,7 +41,10 @@ export default function RootLayout() {
       style={{ flex: 1 }}
     >
       <Stack
-        screenOptions={{ contentStyle: { backgroundColor: "rgba(0 0 0 / 0)" } }}
+        screenOptions={{
+          navigationBarColor: colors.zinc[900],
+          contentStyle: { backgroundColor: "rgba(0 0 0 / 0)" },
+        }}
       >
         <Stack.Screen
           name="(tabs)"

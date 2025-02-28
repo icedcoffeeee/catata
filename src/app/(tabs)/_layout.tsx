@@ -1,5 +1,4 @@
-import { Text } from "@/components";
-import { IonIcons, IonGlyphs } from "@/components/icons";
+import { IonIcons, IonGlyphs, MaterialIcons } from "@/components/icons";
 import { Tabs } from "expo-router";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import colors from "tailwindcss/colors";
@@ -12,6 +11,7 @@ export default function TabsLayout() {
           sceneStyle: styles.scene,
           headerShown: false,
           tabBarStyle: styles.tabBar,
+          tabBarItemStyle: { transform: [{ translateY: 8 }] },
           tabBarLabelStyle: { fontFamily: "SpaceMono" },
           tabBarActiveTintColor: colors.zinc[100],
           tabBarInactiveTintColor: colors.zinc[500],
@@ -41,7 +41,7 @@ export default function TabsLayout() {
         ))}
       </Tabs>
       <TouchableOpacity style={styles.addButton}>
-        <Text style={{ fontSize: 20 }}>+</Text>
+        <MaterialIcons name="add" size={20}></MaterialIcons>
       </TouchableOpacity>
     </>
   );
@@ -54,6 +54,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
   tabBar: {
+    height: 60,
     borderTopWidth: 0,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
@@ -61,9 +62,8 @@ const styles = StyleSheet.create({
   },
   addButton: {
     position: "absolute",
-    bottom: 65,
+    bottom: 75,
     right: 15,
-    display: "flex",
     justifyContent: "center",
     alignItems: "center",
     width: 50,
