@@ -8,7 +8,10 @@ export { SafeAreaView } from "react-native-safe-area-context";
 export function Text({ children, style, ...props }: TextProps) {
   return (
     <TextRN
-      style={[{ color: colors.zinc[100], fontFamily: "SpaceMono" }, style]}
+      style={[
+        { color: colors.zinc[100], fontFamily: "Karla_400Regular" },
+        style,
+      ]}
       {...props}
     >
       {children}
@@ -20,7 +23,10 @@ export function TextInput({ style, ...props }: TextInputProps) {
   return (
     <TextInputRN
       placeholderTextColor={colors.zinc[100]}
-      style={[{ color: colors.zinc[100], fontFamily: "SpaceMono" }, style]}
+      style={[
+        { color: colors.zinc[100], fontFamily: "Karla_400Regular" },
+        style,
+      ]}
       {...props}
     ></TextInputRN>
   );

@@ -1,6 +1,6 @@
 import { Text } from "@/components";
 import { NotesList } from "@/components/notes";
-import { NoteType, getNotes } from "@/data";
+import { NoteScope, getNotes } from "@/data";
 import { styles } from "@/styles";
 import { longDate } from "@/utils";
 import { useState } from "react";
@@ -23,7 +23,7 @@ export default function YearPage() {
         renderItem={({ item: month, index }) => {
           const notes = getNotes().filter(
             (n) =>
-              n.type === NoteType.YEAR &&
+              n.scope === NoteScope.YEAR &&
               new Date(n.epoch).getMonth() === index,
           );
           return (
@@ -35,7 +35,7 @@ export default function YearPage() {
               }}
             >
               <TouchableOpacity>
-                <Text style={{ marginBottom: 5 }}>{month}</Text>
+                <Text style={[styles.mono, { marginBottom: 5 }]}>{month}</Text>
               </TouchableOpacity>
               <NotesList notes={notes} dates></NotesList>
             </View>

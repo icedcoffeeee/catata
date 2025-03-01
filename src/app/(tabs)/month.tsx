@@ -1,6 +1,6 @@
 import { Text } from "@/components";
 import { NotesList } from "@/components/notes";
-import { NoteType, getNotes } from "@/data";
+import { NoteScope, getNotes } from "@/data";
 import { styles } from "@/styles";
 import { longDate } from "@/utils";
 import { FlatList, TouchableOpacity, View } from "react-native";
@@ -29,14 +29,16 @@ export function MonthPage({ date }: { date: Date }) {
           const notes = getNotes()
             .filter(
               (n) =>
-                n.type >= NoteType.MONTH &&
+                n.scope >= NoteScope.MONTH &&
                 new Date(n.epoch).getDate() === date,
             )
-            .sort((a, b) => b.type - a.type);
+            .sort((a, b) => b.scope - a.scope);
           return (
-            <View style={{ flexDirection: "row", gap: 15 }}>
+            <View
+              style={{ flexDirection: "row", alignItems: "baseline", gap: 15 }}
+            >
               <TouchableOpacity>
-                <Text>
+                <Text style={styles.mono}>
                   {date.toString().padStart(2, "0")}{" "}
                   {weeks[(startWeek + date) % weeks.length]}
                 </Text>

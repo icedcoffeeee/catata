@@ -1,12 +1,12 @@
-import colors from "tailwindcss/colors";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { Karla_400Regular } from "@expo-google-fonts/karla";
+import { FontAwesome } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
-import * as SplashScreen from "expo-splash-screen";
-import { useEffect } from "react";
-import "react-native-reanimated";
-import { Stack } from "expo-router";
-import { StatusBar } from "expo-status-bar";
 import { LinearGradient } from "expo-linear-gradient";
+import { Stack } from "expo-router";
+import * as SplashScreen from "expo-splash-screen";
+import { StatusBar } from "expo-status-bar";
+import { useEffect } from "react";
+import colors from "tailwindcss/colors";
 
 export { ErrorBoundary } from "expo-router";
 
@@ -20,7 +20,11 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const SpaceMono = require("@assets/fonts/SpaceMono-Regular.ttf");
-  const [fontloaded, fonterror] = useFonts({ SpaceMono, ...FontAwesome.font });
+  const [fontloaded, fonterror] = useFonts({
+    SpaceMono,
+    Karla_400Regular,
+    ...FontAwesome.font,
+  });
 
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {

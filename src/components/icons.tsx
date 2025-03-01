@@ -1,7 +1,7 @@
 import {
   Ionicons as IoniconsRN,
   FontAwesome as FontAwesomeRN,
-  MaterialIcons as MaterialIconsRN,
+  Feather as FeatherRN,
 } from "@expo/vector-icons";
 import { IconProps } from "@expo/vector-icons/build/createIconSet";
 
@@ -19,15 +19,13 @@ export function FontAwesome({
   return <FontAwesomeRN color={color ?? "white"} {...props}></FontAwesomeRN>;
 }
 
-export function MaterialIcons({
+export function Feather({
   color,
   ...props
-}: IconProps<keyof typeof MaterialIconsRN.glyphMap>) {
-  return (
-    <MaterialIconsRN color={color ?? "white"} {...props}></MaterialIconsRN>
-  );
+}: IconProps<keyof typeof FeatherRN.glyphMap>) {
+  return <FeatherRN color={color ?? "white"} {...props}></FeatherRN>;
 }
 
 export type IonGlyphs = keyof typeof IoniconsRN.glyphMap;
 export type FAGlyphs = keyof typeof FontAwesomeRN.glyphMap;
-export type MIGlyphs = keyof typeof MaterialIconsRN.glyphMap;
+export type FGlyphs = keyof typeof FeatherRN.glyphMap;

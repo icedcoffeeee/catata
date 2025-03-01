@@ -1,4 +1,4 @@
-import { IonIcons, IonGlyphs, MaterialIcons } from "@/components/icons";
+import { IonIcons, IonGlyphs, Feather } from "@/components/icons";
 import { Tabs } from "expo-router";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import colors from "tailwindcss/colors";
@@ -8,11 +8,11 @@ export default function TabsLayout() {
     <>
       <Tabs
         screenOptions={{
-          sceneStyle: style.scene,
+          sceneStyle: stylesheet.scene,
           headerShown: false,
-          tabBarStyle: style.tabBar,
+          tabBarStyle: stylesheet.tabBar,
           tabBarItemStyle: { paddingTop: 8 },
-          tabBarLabelStyle: { fontFamily: "SpaceMono" },
+          tabBarLabelStyle: { fontFamily: "Karla_400Regular" },
           tabBarActiveTintColor: colors.zinc[100],
           tabBarInactiveTintColor: colors.zinc[500],
         }}
@@ -22,7 +22,7 @@ export default function TabsLayout() {
           ["month", "Month", "moon"],
           ["index", "Today", "sunny"],
           ["archive", "Archive", "archive"],
-          ["menu", "Menu", "menu"],
+          ["todos", "Todos", "checkbox"],
         ].map((p) => (
           <Tabs.Screen
             name={p[0]}
@@ -40,14 +40,14 @@ export default function TabsLayout() {
           ></Tabs.Screen>
         ))}
       </Tabs>
-      <TouchableOpacity style={style.addButton}>
-        <MaterialIcons name="add" size={20}></MaterialIcons>
+      <TouchableOpacity style={stylesheet.addButton}>
+        <Feather name="plus" size={20}></Feather>
       </TouchableOpacity>
     </>
   );
 }
 
-const style = StyleSheet.create({
+const stylesheet = StyleSheet.create({
   scene: {
     backgroundColor: "rgba(0 0 0 / 0)",
     paddingHorizontal: 25,

@@ -7,16 +7,17 @@ import {
   View,
   ViewStyle,
 } from "react-native";
-import { FontAwesome } from "./icons";
+import { FAGlyphs, FontAwesome } from "./icons";
 import { styles } from "@/styles";
-import { shortDate } from "@/utils";
+import { longDate, shortDate } from "@/utils";
 
-type NotesListProps = {
+type NotesList = {
   notes: Note[];
   dates?: boolean;
+  fulldates?: boolean;
   style?: StyleProp<ViewStyle>;
 };
-export function NotesList({ notes, dates, style }: NotesListProps) {
+export function NotesList({ notes, dates, fulldates, style }: NotesList) {
   return (
     <FlatList
       data={notes.filter((a) =>
@@ -26,15 +27,14 @@ export function NotesList({ notes, dates, style }: NotesListProps) {
       keyExtractor={(n) => n.id.toString()}
       renderItem={({ item: n }) => (
         <View style={style}>
-          <NoteText note={n} dates={dates}></NoteText>
+          <NoteText note={n} date={dates} fulldate={fulldates}></NoteText>
           {n.subnoteIDs.length !== 0 && (
-            <View style={{ marginLeft: 20 }}>
-              <NotesList
-                notes={notes.filter((a) =>
-                  notes.some((b) => b.subnoteIDs.includes(a.id)),
-                )}
-              ></NotesList>
-            </View>
+            <NotesList
+              notes={notes.filter((a) =>
+                notes.some((b) => b.subnoteIDs.includes(a.id)),
+              )}
+              style={{ marginLeft: 15 }}
+            ></NotesList>
           )}
         </View>
       )}
@@ -42,21 +42,31 @@ export function NotesList({ notes, dates, style }: NotesListProps) {
   );
 }
 
-function NoteText({ note, dates }: { note: Note; dates?: boolean }) {
+type NoteText = { note: Note; date?: boolean; fulldate?: boolean };
+function NoteText({ note, date, fulldate }: NoteText) {
   return (
     <TouchableOpacity
-      style={{ flexDirection: "row", alignItems: "baseline", gap: 10 }}
+      style={{
+        marginBottom: 5,
+        flexDirection: "row",
+        alignItems: "baseline",
+        gap: 10,
+      }}
     >
-      {!dates ? (
-        <FontAwesome
-          name="minus"
-          size={5}
-          style={{ transform: [{ translateY: -2 }] }}
-        ></FontAwesome>
-      ) : (
-        <Text>{shortDate(note.epoch).split("/")[1]}:</Text>
+      {date && (
+        <Text style={styles.mono}>{shortDate(note.epoch).split("/")[1]}:</Text>
       )}
-      <Text>{note.text}</Text>
+      {fulldate && (
+        <Text style={styles.mono}>{longDate(note.epoch).split(",")[0]}:</Text>
+      )}
+      <FontAwesome
+        name={
+          ["circle" as FAGlyphs, "circle-thin", "check-circle"][
+            note.type
+          ] as FAGlyphs
+        }
+      ></FontAwesome>
+      <Text style={{ flexShrink: 1 }}>{note.text}</Text>
     </TouchableOpacity>
   );
 }
