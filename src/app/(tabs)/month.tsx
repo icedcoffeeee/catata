@@ -5,6 +5,7 @@ import { styles } from "@/styles";
 import { longDate } from "@/utils";
 import { FlatList, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import colors from "tailwindcss/colors";
 
 export default function ThisMonthPage() {
   return <MonthPage date={new Date()}></MonthPage>;
@@ -33,14 +34,22 @@ export function MonthPage({ date }: { date: Date }) {
                 new Date(n.epoch).getDate() === date,
             )
             .sort((a, b) => b.scope - a.scope);
+          const weekday = weeks[(startWeek + date) % weeks.length];
           return (
             <View
-              style={{ flexDirection: "row", alignItems: "baseline", gap: 15 }}
+              style={[
+                styles.row,
+                { gap: 15 },
+                {
+                  marginTop: weekday == "M" ? 2 : 0,
+                  borderTopWidth: weekday == "M" ? 1 : 0,
+                  borderColor: colors.zinc[100],
+                },
+              ]}
             >
               <TouchableOpacity>
                 <Text style={styles.mono}>
-                  {date.toString().padStart(2, "0")}{" "}
-                  {weeks[(startWeek + date) % weeks.length]}
+                  {date.toString().padStart(2, "0")} {weekday}
                 </Text>
               </TouchableOpacity>
               <NotesList notes={notes}></NotesList>

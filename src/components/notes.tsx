@@ -45,14 +45,7 @@ export function NotesList({ notes, dates, fulldates, style }: NotesList) {
 type NoteText = { note: Note; date?: boolean; fulldate?: boolean };
 function NoteText({ note, date, fulldate }: NoteText) {
   return (
-    <TouchableOpacity
-      style={{
-        marginBottom: 5,
-        flexDirection: "row",
-        alignItems: "baseline",
-        gap: 10,
-      }}
-    >
+    <TouchableOpacity style={[styles.row, { marginBottom: 5 }]}>
       {date && (
         <Text style={styles.mono}>{shortDate(note.epoch).split("/")[1]}:</Text>
       )}

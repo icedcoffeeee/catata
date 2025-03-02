@@ -11,7 +11,7 @@ export default function MenuPage() {
   return (
     <SafeAreaView style={stylesheet.container}>
       <TouchableOpacity style={stylesheet.button}>
-        <Text>Settings</Text>
+        <Text>App Settings</Text>
         <IonIcons name="settings-outline" size={15}></IonIcons>
       </TouchableOpacity>
       <Text style={[styles.mono, stylesheet.title]}>Todos</Text>
@@ -31,7 +31,7 @@ const stylesheet = StyleSheet.create({
     borderRadius: 5,
   },
   title: {
-    marginTop: 15,
+    marginTop: 12,
     borderTopWidth: 1,
     borderTopColor: colors.zinc[100],
   },

@@ -11,7 +11,7 @@ export default function ArchivePage() {
     .map((a) => parseInt(a));
   return (
     <SafeAreaView>
-      <View style={{ flexDirection: "row", gap: 10, marginBottom: 15 }}>
+      <View style={[styles.row, { alignItems: "center", marginBottom: 15 }]}>
         <TextInput
           placeholder="Search"
           style={stylesheet.searchInput}
@@ -41,6 +41,7 @@ const stylesheet = StyleSheet.create({
   searchButton: {
     justifyContent: "center",
     alignItems: "center",
+    width: 40,
     aspectRatio: 1,
     borderRadius: 100,
     backgroundColor: colors.zinc[100],

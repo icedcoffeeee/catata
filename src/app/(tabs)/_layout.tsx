@@ -1,9 +1,14 @@
 import { IonIcons, IonGlyphs, Feather } from "@/components/icons";
+import { Modal } from "@/components/modal";
+import { UseState } from "@/utils";
 import { Tabs } from "expo-router";
+import { useState } from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import colors from "tailwindcss/colors";
 
 export default function TabsLayout() {
+  let state: UseState<boolean>;
+  const [_, setModal] = (state = useState(false));
   return (
     <>
       <Tabs
@@ -40,16 +45,20 @@ export default function TabsLayout() {
           ></Tabs.Screen>
         ))}
       </Tabs>
-      <TouchableOpacity style={stylesheet.addButton}>
+      <TouchableOpacity
+        onPress={() => setModal(true)}
+        style={stylesheet.addButton}
+      >
         <Feather name="plus" size={20}></Feather>
       </TouchableOpacity>
+      <Modal state={state}></Modal>
     </>
   );
 }
 
 const stylesheet = StyleSheet.create({
   scene: {
-    backgroundColor: "rgba(0 0 0 / 0)",
+    backgroundColor: "#00000000",
     paddingHorizontal: 25,
     paddingTop: 20,
   },

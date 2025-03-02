@@ -47,7 +47,7 @@ export default function RootLayout() {
       <Stack
         screenOptions={{
           navigationBarColor: colors.zinc[900],
-          contentStyle: { backgroundColor: "rgba(0 0 0 / 0)" },
+          contentStyle: { backgroundColor: "#00000000" },
         }}
       >
         <Stack.Screen

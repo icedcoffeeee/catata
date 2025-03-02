@@ -1,3 +1,5 @@
+export type UseState<T> = [T, (_: T) => void];
+
 export const longDate = Intl.DateTimeFormat("en-US", {
   day: "numeric",
   month: "long",
