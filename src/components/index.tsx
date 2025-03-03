@@ -26,7 +26,7 @@ export const TextInput = forwardRef(function (
     <TextInputRN
       ref={ref}
       placeholderTextColor={colors.zinc[500]}
-      style={[stylesheet.text, style]}
+      style={[stylesheet.text, { paddingVertical: 15 }, style]}
       {...props}
     ></TextInputRN>
   );
