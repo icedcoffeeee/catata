@@ -14,7 +14,7 @@ export interface Note {
   time: number;
   scope: NoteScope;
   type: NoteType;
-  subnoteIDs: number[];
+  parentID?: number;
 }
 
 export const getNotes: () => Note[] = () => [
@@ -24,7 +24,6 @@ export const getNotes: () => Note[] = () => [
     time: new Date().getTime(),
     scope: NoteScope.DAY,
     type: NoteType.NOTE,
-    subnoteIDs: [2, 4],
   },
   {
     id: 2,
@@ -32,7 +31,7 @@ export const getNotes: () => Note[] = () => [
     time: new Date().getTime(),
     scope: NoteScope.DAY,
     type: NoteType.TODO,
-    subnoteIDs: [3],
+    parentID: 1,
   },
   {
     id: 3,
@@ -40,7 +39,7 @@ export const getNotes: () => Note[] = () => [
     time: new Date().getTime(),
     scope: NoteScope.DAY,
     type: NoteType.DONE,
-    subnoteIDs: [],
+    parentID: 2,
   },
   {
     id: 4,
@@ -48,7 +47,7 @@ export const getNotes: () => Note[] = () => [
     time: new Date().getTime(),
     scope: NoteScope.DAY,
     type: NoteType.NOTE,
-    subnoteIDs: [],
+    parentID: 1,
   },
   {
     id: 5,
@@ -56,7 +55,6 @@ export const getNotes: () => Note[] = () => [
     time: new Date().getTime(),
     scope: NoteScope.MONTH,
     type: NoteType.NOTE,
-    subnoteIDs: [],
   },
   {
     id: 6,
@@ -64,7 +62,6 @@ export const getNotes: () => Note[] = () => [
     time: new Date(2025, 2, 1).getTime(),
     scope: NoteScope.MONTH,
     type: NoteType.NOTE,
-    subnoteIDs: [],
   },
   {
     id: 7,
@@ -72,7 +69,6 @@ export const getNotes: () => Note[] = () => [
     time: new Date().getTime(),
     scope: NoteScope.YEAR,
     type: NoteType.NOTE,
-    subnoteIDs: [],
   },
   {
     id: 8,
@@ -80,6 +76,5 @@ export const getNotes: () => Note[] = () => [
     time: new Date(2025, 5, 15).getTime(),
     scope: NoteScope.YEAR,
     type: NoteType.TODO,
-    subnoteIDs: [],
   },
 ];

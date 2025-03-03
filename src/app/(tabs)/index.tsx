@@ -20,7 +20,7 @@ export function DayNotes({ dayTime }: { dayTime: number }) {
       <Text style={[styles.h1, { justifyContent: "space-between" }]}>
         {longDate(dayTime)}
       </Text>
-      <NotesList notes={notes}></NotesList>
+      <NotesList notes={notes.filter((n) => !n.parentID)}></NotesList>
     </SafeAreaView>
   );
 }

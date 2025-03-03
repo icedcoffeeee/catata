@@ -1,4 +1,4 @@
-import { Note } from "@/data";
+import { Note, getNotes } from "@/data";
 import { Text } from ".";
 import {
   FlatList,
@@ -16,24 +16,27 @@ type NotesList = {
   notes: Note[];
   dates?: boolean;
   fulldates?: boolean;
+  nochildren?: boolean;
   style?: StyleProp<ViewStyle>;
 };
-export function NotesList({ notes, dates, fulldates, style }: NotesList) {
+export function NotesList({
+  notes,
+  dates,
+  fulldates,
+  nochildren,
+  style,
+}: NotesList) {
   return (
     <FlatList
-      data={notes.filter((a) =>
-        notes.every((b) => !b.subnoteIDs.includes(a.id)),
-      )}
+      data={notes}
       contentContainerStyle={styles.scroll}
       keyExtractor={(n) => n.id.toString()}
       renderItem={({ item: n }) => (
         <View style={style}>
           <NoteText note={n} date={dates} fulldate={fulldates}></NoteText>
-          {n.subnoteIDs.length !== 0 && (
+          {!nochildren && (
             <NotesList
-              notes={notes.filter((a) =>
-                notes.some((b) => b.subnoteIDs.includes(a.id)),
-              )}
+              notes={getNotes().filter((a) => a.parentID === n.id)}
               style={{ marginLeft: 15 }}
             ></NotesList>
           )}

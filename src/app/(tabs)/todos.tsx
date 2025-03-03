@@ -22,6 +22,7 @@ export default function MenuPage() {
       <NotesList
         notes={todos.sort((a, b) => b.time - a.time)}
         fulldates
+        nochildren
       ></NotesList>
     </SafeAreaView>
   );
