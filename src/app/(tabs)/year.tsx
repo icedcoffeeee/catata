@@ -3,7 +3,7 @@ import { NotesList } from "@/components/notes";
 import { NoteScope, getNotes } from "@/data";
 import { useModal } from "@/store";
 import { styles } from "@/styles";
-import { longDate, shortDate } from "@/utils";
+import { getFullMDY, getMDY } from "@/utils";
 import { useState } from "react";
 import { FlatList, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -13,7 +13,7 @@ export default function YearPage() {
   const [year, _setYear] = useState(new Date().getFullYear());
   const months = Array(12)
     .fill("")
-    .map((_, i) => longDate(new Date(1, i + 1)).split(" ")[0]);
+    .map((_, i) => getFullMDY(new Date(1, i + 1).getTime()).M);
 
   const { open } = useModal();
 
@@ -26,12 +26,8 @@ export default function YearPage() {
         data={months}
         renderItem={({ item: month, index: mon }) => {
           const notes = getNotes().filter((n) => {
-            const [mon_, _day, year_] = shortDate(n.epoch)
-              .split("/")
-              .map((a) => parseInt(a));
-            return (
-              n.scope === NoteScope.YEAR && mon_ === mon + 1 && year_ === year
-            );
+            const { M, Y } = getMDY(n.time);
+            return n.scope === NoteScope.YEAR && M === mon + 1 && Y === year;
           });
           return (
             <View

@@ -17,3 +17,14 @@ export const shortDate = Intl.DateTimeFormat("en-US", {
   month: "numeric",
   year: "numeric",
 }).format;
+
+export const getMDY = (time: number) => {
+  const [M, D, Y] = shortDate(time)
+    .split("/")
+    .map((a) => parseInt(a));
+  return { M, D, Y };
+};
+export const getFullMDY = (time: number) => {
+  const [M, D, Y] = longDate(time).replace(",", "").split(" ");
+  return { M, D, Y };
+};

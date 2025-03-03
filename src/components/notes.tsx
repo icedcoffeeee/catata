@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { FAGlyphs, FontAwesome } from "./icons";
 import { styles } from "@/styles";
-import { longDate, shortDate } from "@/utils";
+import { getFullMDY, getMDY } from "@/utils";
 import { useModal } from "@/store";
 
 type NotesList = {
@@ -46,16 +46,18 @@ export function NotesList({ notes, dates, fulldates, style }: NotesList) {
 type NoteText = { note: Note; date?: boolean; fulldate?: boolean };
 function NoteText({ note, date, fulldate }: NoteText) {
   const { open } = useModal();
+  const { D: day } = getMDY(note.time);
+  const { D: fullday } = getFullMDY(note.time);
   return (
     <TouchableOpacity
       onPress={() => open(note)}
       style={[styles.row, { marginBottom: 5 }]}
     >
-      {date && (
-        <Text style={styles.mono}>{shortDate(note.epoch).split("/")[1]}:</Text>
-      )}
+      {date && <Text style={styles.mono}>{day}:</Text>}
       {fulldate && (
-        <Text style={styles.mono}>{longDate(note.epoch).split(",")[0]}:</Text>
+        <Text style={styles.mono}>
+          {fullday} {day}:
+        </Text>
       )}
       <FontAwesome
         name={

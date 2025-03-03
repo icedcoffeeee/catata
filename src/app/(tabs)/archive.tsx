@@ -8,7 +8,7 @@ import { FlatList, StyleSheet, TouchableOpacity } from "react-native";
 import colors from "tailwindcss/colors";
 
 export default function ArchivePage() {
-  const groupedArr = groupArr(getNotes(), ({ epoch }) => longDate(epoch));
+  const groupedArr = groupArr(getNotes(), ({ time }) => longDate(time));
 
   return (
     <SafeAreaView>

@@ -3,7 +3,7 @@ import { NotesList } from "@/components/notes";
 import { NoteScope, getNotes } from "@/data";
 import { useModal } from "@/store";
 import { styles } from "@/styles";
-import { longDate, shortDate } from "@/utils";
+import { getFullMDY, getMDY } from "@/utils";
 import { FlatList, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import colors from "tailwindcss/colors";
@@ -19,16 +19,15 @@ export function MonthPage({ date }: { date: Date }) {
   const dates = Array(new Date(1, date.getMonth() + 1, -1).getDate() + 1)
     .fill(0)
     .map((_, i) => i + 1);
-  const [pageMon, _, pageYear] = shortDate(date.getTime())
-    .split("/")
-    .map((a) => parseInt(a));
+  const { M: pageMon, Y: pageYear } = getMDY(date.getTime());
+  const { M: fullMon, Y: fullYear } = getFullMDY(date.getTime());
 
   const { open } = useModal();
 
   return (
     <SafeAreaView>
       <Text style={styles.h1}>
-        {longDate(date).split(" ")[0]} {longDate(date).split(" ")[2]}
+        {fullMon} {fullYear}
       </Text>
       <FlatList
         data={dates}
@@ -36,13 +35,9 @@ export function MonthPage({ date }: { date: Date }) {
         renderItem={({ item: date, index }) => {
           const notes = getNotes()
             .filter((n) => {
-              const [mon, day, _] = shortDate(n.epoch)
-                .split("/")
-                .map((a) => parseInt(a));
+              const { M, D } = getMDY(n.time);
               return (
-                n.scope >= NoteScope.MONTH &&
-                mon === pageMon &&
-                day === index + 1
+                n.scope >= NoteScope.MONTH && M === pageMon && D === index + 1
               );
             })
             .sort((a, b) => b.scope - a.scope);

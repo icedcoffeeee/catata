@@ -23,7 +23,7 @@ export function Modal() {
   // ^^ pull out keyboard
 
   const text = note?.text;
-  const epoch = note?.epoch ?? newTime ?? new Date().getTime();
+  const time = note?.time ?? newTime ?? new Date().getTime();
   const scope = note?.scope ?? NoteScope.DAY;
   const isNote = note ? note.type === NoteType.NOTE : true;
 
@@ -44,7 +44,7 @@ export function Modal() {
       <View style={stylesheet.container}>
         <View style={[styles.row, { justifyContent: "space-between" }]}>
           <TouchableOpacity>
-            <Text style={styles.mono}>{longDate(epoch)}</Text>
+            <Text style={styles.mono}>{longDate(time)}</Text>
           </TouchableOpacity>
           <View style={styles.row}>
             <TouchableOpacity>
