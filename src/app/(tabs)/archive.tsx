@@ -1,14 +1,15 @@
 import { SafeAreaView, Text, TextInput, View } from "@/components";
 import { IonIcons } from "@/components/icons";
+import { NotesList } from "@/components/notes";
+import { getNotes } from "@/data";
 import { styles } from "@/styles";
-import { longDate, shortDate } from "@/utils";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { groupArr, longDate } from "@/utils";
+import { FlatList, StyleSheet, TouchableOpacity } from "react-native";
 import colors from "tailwindcss/colors";
 
 export default function ArchivePage() {
-  const [mon, day, yer] = shortDate(new Date())
-    .split("/")
-    .map((a) => parseInt(a));
+  const groupedArr = groupArr(getNotes(), ({ epoch }) => longDate(epoch));
+
   return (
     <SafeAreaView>
       <View style={[styles.row, { alignItems: "center", marginBottom: 15 }]}>
@@ -20,12 +21,17 @@ export default function ArchivePage() {
           <IonIcons name="search" size={15} color={colors.zinc[950]}></IonIcons>
         </TouchableOpacity>
       </View>
-      <Text style={[styles.mono, stylesheet.title]}>
-        {longDate(new Date(yer, mon - 1, day - 1).getTime())}
-      </Text>
-      {
-        //<NotesList notes={notes}></NotesList>
-      }
+      <FlatList
+        data={Object.entries(groupedArr)}
+        renderItem={({ item: [date, notes] }) => {
+          return (
+            <>
+              <Text style={[styles.mono, stylesheet.title]}>{date}</Text>
+              <NotesList notes={notes}></NotesList>
+            </>
+          );
+        }}
+      ></FlatList>
     </SafeAreaView>
   );
 }
@@ -49,5 +55,7 @@ const stylesheet = StyleSheet.create({
   title: {
     borderTopWidth: 1,
     borderTopColor: colors.zinc[100],
+    marginTop: 10,
+    marginBottom: 10,
   },
 });

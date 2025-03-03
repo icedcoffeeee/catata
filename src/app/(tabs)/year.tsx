@@ -2,14 +2,14 @@ import { Text } from "@/components";
 import { NotesList } from "@/components/notes";
 import { NoteScope, getNotes } from "@/data";
 import { styles } from "@/styles";
-import { longDate } from "@/utils";
+import { longDate, shortDate } from "@/utils";
 import { useState } from "react";
 import { FlatList, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import colors from "tailwindcss/colors";
 
 export default function YearPage() {
-  const [year, setYear] = useState(new Date().getFullYear());
+  const [year, _setYear] = useState(new Date().getFullYear());
   const months = Array(12)
     .fill("")
     .map((_, i) => longDate(new Date(1, i + 1)).split(" ")[0]);
@@ -20,12 +20,15 @@ export default function YearPage() {
       </TouchableOpacity>
       <FlatList
         data={months}
-        renderItem={({ item: month, index }) => {
-          const notes = getNotes().filter(
-            (n) =>
-              n.scope === NoteScope.YEAR &&
-              new Date(n.epoch).getMonth() === index,
-          );
+        renderItem={({ item: month, index: mon }) => {
+          const notes = getNotes().filter((n) => {
+            const [mon_, _day, year_] = shortDate(n.epoch)
+              .split("/")
+              .map((a) => parseInt(a));
+            return (
+              n.scope === NoteScope.YEAR && mon_ === mon + 1 && year_ === year
+            );
+          });
           return (
             <View
               style={{

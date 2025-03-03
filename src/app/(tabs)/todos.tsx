@@ -31,7 +31,8 @@ const stylesheet = StyleSheet.create({
     borderRadius: 5,
   },
   title: {
-    marginTop: 12,
+    marginTop: 20,
+    marginBottom: 10,
     borderTopWidth: 1,
     borderTopColor: colors.zinc[100],
   },

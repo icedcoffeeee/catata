@@ -21,7 +21,7 @@ export const getNotes: () => Note[] = () => [
   {
     id: 1,
     text: "Day Note",
-    epoch: new Date().getTime(),
+    epoch: new Date(2025, 2, 3).getTime(),
     scope: NoteScope.DAY,
     type: NoteType.NOTE,
     subnoteIDs: [2, 4],
@@ -29,7 +29,7 @@ export const getNotes: () => Note[] = () => [
   {
     id: 2,
     text: "Sub Note",
-    epoch: new Date().getTime(),
+    epoch: new Date(2025, 2, 3).getTime(),
     scope: NoteScope.DAY,
     type: NoteType.TODO,
     subnoteIDs: [3],
@@ -37,7 +37,7 @@ export const getNotes: () => Note[] = () => [
   {
     id: 3,
     text: "Sub Sub Note",
-    epoch: new Date().getTime(),
+    epoch: new Date(2025, 2, 3).getTime(),
     scope: NoteScope.DAY,
     type: NoteType.DONE,
     subnoteIDs: [],
@@ -45,7 +45,7 @@ export const getNotes: () => Note[] = () => [
   {
     id: 4,
     text: "Long Long Long Long Long Long Long Long Long Long Long Sub Note",
-    epoch: new Date().getTime(),
+    epoch: new Date(2025, 2, 3).getTime(),
     scope: NoteScope.DAY,
     type: NoteType.NOTE,
     subnoteIDs: [],
@@ -53,7 +53,7 @@ export const getNotes: () => Note[] = () => [
   {
     id: 5,
     text: "Month Note",
-    epoch: new Date().getTime(),
+    epoch: new Date(2025, 2, 1).getTime(),
     scope: NoteScope.MONTH,
     type: NoteType.NOTE,
     subnoteIDs: [],
@@ -61,7 +61,7 @@ export const getNotes: () => Note[] = () => [
   {
     id: 6,
     text: "Year Note",
-    epoch: new Date().getTime(),
+    epoch: new Date(2025, 5, 15).getTime(),
     scope: NoteScope.YEAR,
     type: NoteType.NOTE,
     subnoteIDs: [],
@@ -69,7 +69,7 @@ export const getNotes: () => Note[] = () => [
   {
     id: 7,
     text: "Year Note",
-    epoch: new Date().getTime(),
+    epoch: new Date(2025, 2, 3).getTime(),
     scope: NoteScope.YEAR,
     type: NoteType.TODO,
     subnoteIDs: [],
