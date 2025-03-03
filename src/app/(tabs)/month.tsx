@@ -1,6 +1,7 @@
 import { Text } from "@/components";
 import { NotesList } from "@/components/notes";
 import { NoteScope, getNotes } from "@/data";
+import { useModal } from "@/store";
 import { styles } from "@/styles";
 import { longDate, shortDate } from "@/utils";
 import { FlatList, TouchableOpacity, View } from "react-native";
@@ -18,9 +19,11 @@ export function MonthPage({ date }: { date: Date }) {
   const dates = Array(new Date(1, date.getMonth() + 1, -1).getDate() + 1)
     .fill(0)
     .map((_, i) => i + 1);
-  const [pageMon, ..._] = shortDate(date.getTime())
+  const [pageMon, _, pageYear] = shortDate(date.getTime())
     .split("/")
     .map((a) => parseInt(a));
+
+  const { open } = useModal();
 
   return (
     <SafeAreaView>
@@ -56,7 +59,11 @@ export function MonthPage({ date }: { date: Date }) {
                 },
               ]}
             >
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() =>
+                  open(new Date(pageYear, pageMon - 1, date).getTime())
+                }
+              >
                 <Text style={styles.mono}>
                   {date.toString().padStart(2, "0")} {weekday}
                 </Text>

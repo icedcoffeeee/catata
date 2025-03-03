@@ -10,6 +10,7 @@ import {
 import { FAGlyphs, FontAwesome } from "./icons";
 import { styles } from "@/styles";
 import { longDate, shortDate } from "@/utils";
+import { useModal } from "@/store";
 
 type NotesList = {
   notes: Note[];
@@ -44,8 +45,12 @@ export function NotesList({ notes, dates, fulldates, style }: NotesList) {
 
 type NoteText = { note: Note; date?: boolean; fulldate?: boolean };
 function NoteText({ note, date, fulldate }: NoteText) {
+  const { open } = useModal();
   return (
-    <TouchableOpacity style={[styles.row, { marginBottom: 5 }]}>
+    <TouchableOpacity
+      onPress={() => open(note)}
+      style={[styles.row, { marginBottom: 5 }]}
+    >
       {date && (
         <Text style={styles.mono}>{shortDate(note.epoch).split("/")[1]}:</Text>
       )}

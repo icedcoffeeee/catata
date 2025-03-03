@@ -1,6 +1,7 @@
 import { Text } from "@/components";
 import { NotesList } from "@/components/notes";
 import { NoteScope, getNotes } from "@/data";
+import { useModal } from "@/store";
 import { styles } from "@/styles";
 import { longDate, shortDate } from "@/utils";
 import { useState } from "react";
@@ -13,6 +14,9 @@ export default function YearPage() {
   const months = Array(12)
     .fill("")
     .map((_, i) => longDate(new Date(1, i + 1)).split(" ")[0]);
+
+  const { open } = useModal();
+
   return (
     <SafeAreaView>
       <TouchableOpacity>
@@ -37,7 +41,9 @@ export default function YearPage() {
                 borderColor: colors.zinc[100],
               }}
             >
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => open(new Date(year, mon, 1).getTime())}
+              >
                 <Text style={[styles.mono, { marginBottom: 5 }]}>{month}</Text>
               </TouchableOpacity>
               <NotesList notes={notes} dates></NotesList>

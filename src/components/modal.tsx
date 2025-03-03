@@ -7,29 +7,25 @@ import {
 } from "react-native";
 import { Text, TextInput, View } from ".";
 import colors from "tailwindcss/colors";
-import { UseState, longDate } from "@/utils";
+import { longDate } from "@/utils";
 import { LinearGradient } from "expo-linear-gradient";
-import { useRef, useState } from "react";
-import { Note, NoteScope } from "@/data";
+import { useRef } from "react";
+import { NoteScope, NoteType } from "@/data";
 import { Feather, FontAwesome } from "./icons";
 import { styles } from "@/styles";
+import { useModal } from "@/store";
 
-type Modal = {
-  state: UseState<boolean>;
-  note?: Note;
-};
-export function Modal({ state, note }: Modal) {
-  const [modal, setModal] = state;
-  const close = () => setModal(false);
+export function Modal() {
+  const { modal, close, note, newTime } = useModal();
 
   const input = useRef<TextInputRN>(null);
   setTimeout(() => input.current?.focus(), 100);
   // ^^ pull out keyboard
 
-  const [text, setText] = useState(note?.text);
-  const [epoch, _setEpoch] = useState(note?.epoch ?? new Date().getTime());
-  const [scope, setScope] = useState(note?.scope ?? NoteScope.DAY);
-  const [isNote, setIsNote] = useState(true);
+  const text = note?.text;
+  const epoch = note?.epoch ?? newTime ?? new Date().getTime();
+  const scope = note?.scope ?? NoteScope.DAY;
+  const isNote = note ? note.type === NoteType.NOTE : true;
 
   return (
     <ModalRN
@@ -51,11 +47,11 @@ export function Modal({ state, note }: Modal) {
             <Text style={styles.mono}>{longDate(epoch)}</Text>
           </TouchableOpacity>
           <View style={styles.row}>
-            <TouchableOpacity onPress={() => setIsNote(!isNote)}>
+            <TouchableOpacity>
               <Text>{isNote ? "Note" : "Todo"}</Text>
             </TouchableOpacity>
             <Feather name="minus"></Feather>
-            <TouchableOpacity onPress={() => setScope((scope + 1) % 3)}>
+            <TouchableOpacity>
               <Text>{["Day", "Month", "Year"][scope]}</Text>
             </TouchableOpacity>
           </View>
@@ -65,8 +61,7 @@ export function Modal({ state, note }: Modal) {
           <TextInput
             ref={input}
             placeholder={`New ${isNote ? "note" : "todo"}...`}
-            value={text}
-            onChangeText={(text) => setText(text)}
+            value={note?.text}
             multiline
           ></TextInput>
         </View>
