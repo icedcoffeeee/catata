@@ -10,13 +10,15 @@ import colors from "tailwindcss/colors";
 export default function ArchivePage() {
   const { M: M_, D: D_, Y: Y_ } = getMDY(new Date().getTime());
   const groupedArr = groupArr(
-    getNotes().filter((n) => {
-      const { M, D, Y } = getMDY(n.time);
-      return (
-        new Date(Y_, M_, D_).getTime() - new Date(Y, M, D).getTime() >
-        24 * 60 * 60 * 1000
-      );
-    }),
+    getNotes()
+      .filter((n) => {
+        const { M, D, Y } = getMDY(n.time);
+        return (
+          new Date(Y_, M_, D_).getTime() - new Date(Y, M, D).getTime() >
+          24 * 60 * 60 * 1000
+        );
+      })
+      .sort((a, b) => b.time - a.time),
     ({ time }) => longDate(time),
   );
 

@@ -19,7 +19,10 @@ export default function MenuPage() {
         <IonIcons name="settings-outline" size={15}></IonIcons>
       </TouchableOpacity>
       <Text style={[styles.mono, stylesheet.title]}>Todos</Text>
-      <NotesList notes={todos} fulldates></NotesList>
+      <NotesList
+        notes={todos.sort((a, b) => b.time - a.time)}
+        fulldates
+      ></NotesList>
     </SafeAreaView>
   );
 }

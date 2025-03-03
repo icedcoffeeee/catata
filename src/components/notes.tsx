@@ -47,7 +47,7 @@ type NoteText = { note: Note; date?: boolean; fulldate?: boolean };
 function NoteText({ note, date, fulldate }: NoteText) {
   const { open } = useModal();
   const { D: day } = getMDY(note.time);
-  const { D: fullday } = getFullMDY(note.time);
+  const { M: fullMon } = getFullMDY(note.time);
   return (
     <TouchableOpacity
       onPress={() => open(note)}
@@ -56,7 +56,7 @@ function NoteText({ note, date, fulldate }: NoteText) {
       {date && <Text style={styles.mono}>{day}:</Text>}
       {fulldate && (
         <Text style={styles.mono}>
-          {fullday} {day}:
+          {fullMon} {day}:
         </Text>
       )}
       <FontAwesome
