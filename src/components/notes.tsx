@@ -1,4 +1,3 @@
-import { Note, getNotes } from "@/data";
 import { Text } from ".";
 import {
   FlatList,
@@ -11,6 +10,8 @@ import { FAGlyphs, FontAwesome } from "./icons";
 import { styles } from "@/styles";
 import { getFullMDY, getMDY } from "@/utils";
 import { useModal } from "@/store";
+import { Note, db, notesT } from "@/db";
+import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 
 type NotesList = {
   notes: Note[];
@@ -19,6 +20,7 @@ type NotesList = {
   nochildren?: boolean;
   style?: StyleProp<ViewStyle>;
 };
+
 export function NotesList({
   notes,
   dates,
@@ -26,6 +28,8 @@ export function NotesList({
   nochildren,
   style,
 }: NotesList) {
+  const { data: allNotes } = useLiveQuery(db.select().from(notesT));
+
   return (
     <FlatList
       data={notes}
@@ -36,7 +40,7 @@ export function NotesList({
           <NoteText note={n} date={dates} fulldate={fulldates}></NoteText>
           {!nochildren && (
             <NotesList
-              notes={getNotes().filter((a) => a.parentID === n.id)}
+              notes={allNotes.filter((a) => a.parentID === n.id)}
               style={{ marginLeft: 15 }}
             ></NotesList>
           )}

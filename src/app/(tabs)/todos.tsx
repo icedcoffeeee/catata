@@ -1,14 +1,17 @@
 import { SafeAreaView, Text } from "@/components";
 import { IonIcons } from "@/components/icons";
 import { NotesList } from "@/components/notes";
-import { NoteType, getNotes } from "@/data";
+import { NoteType, db, notesT } from "@/db";
 import { styles } from "@/styles";
+import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 import { router } from "expo-router";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import colors from "tailwindcss/colors";
 
 export default function MenuPage() {
-  const todos = getNotes().filter((n) => n.type === NoteType.TODO);
+  const { data: allNotes } = useLiveQuery(db.select().from(notesT));
+
+  const todos = allNotes.filter((n) => n.type === NoteType.TODO);
   return (
     <SafeAreaView style={stylesheet.container}>
       <TouchableOpacity

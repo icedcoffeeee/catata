@@ -1,5 +1,8 @@
+import { db } from "@/db";
+import migrations from "@/drizzle/migrations";
 import { Karla_400Regular } from "@expo-google-fonts/karla";
 import { FontAwesome } from "@expo/vector-icons";
+import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
 import { useFonts } from "expo-font";
 import { LinearGradient } from "expo-linear-gradient";
 import { Stack } from "expo-router";
@@ -26,16 +29,19 @@ export default function RootLayout() {
     ...FontAwesome.font,
   });
 
+  const { success: DBsuccess, error: DBerror } = useMigrations(db, migrations);
+
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
     if (fonterror) throw fonterror;
-  }, [fonterror]);
+    if (DBerror) throw DBerror;
+  }, [fonterror, DBerror]);
 
   useEffect(() => {
-    if (fontloaded) SplashScreen.hideAsync();
-  }, [fontloaded]);
+    if (fontloaded && DBsuccess) SplashScreen.hideAsync();
+  }, [fontloaded, DBsuccess]);
 
-  if (!fontloaded) return null;
+  if (!fontloaded && !DBsuccess) return null;
 
   return (
     <LinearGradient

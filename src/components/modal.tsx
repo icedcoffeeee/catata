@@ -14,9 +14,11 @@ import { NoteScope, NoteType } from "@/data";
 import { Feather, FontAwesome } from "./icons";
 import { styles } from "@/styles";
 import { useModal } from "@/store";
+import { Note, db, notesT } from "@/db";
+import { eq } from "drizzle-orm";
 
 export function Modal() {
-  const { modal, close, set, ...note } = useModal();
+  const { modal, close, set, reset, ...note } = useModal();
 
   const input = useRef<TextInputRN>(null);
   setTimeout(() => input.current?.focus(), 100);
@@ -47,11 +49,15 @@ export function Modal() {
             <Text style={styles.mono}>{longDate(time)}</Text>
           </TouchableOpacity>
           <View style={styles.row}>
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => set({ type: (note.type + 1) % 2 })}
+            >
               <Text>{isNote ? "Note" : "Todo"}</Text>
             </TouchableOpacity>
             <Feather name="minus"></Feather>
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => set({ scope: (note.scope + 1) % 3 })}
+            >
               <Text>{["Day", "Month", "Year"][scope]}</Text>
             </TouchableOpacity>
           </View>
@@ -86,6 +92,10 @@ export function Modal() {
                 stylesheet.submit,
                 { opacity: !!text ? 1 : 0.4 },
               ]}
+              onPress={() => {
+                delNote(note);
+                reset();
+              }}
               disabled={!text}
             >
               <Feather name="trash"></Feather>
@@ -97,6 +107,7 @@ export function Modal() {
                 stylesheet.submit,
                 { opacity: !!text ? 1 : 0.4 },
               ]}
+              onPress={() => addNote(note)}
               disabled={!text}
             >
               <Feather name="send"></Feather>
@@ -107,6 +118,22 @@ export function Modal() {
       </View>
     </ModalRN>
   );
+}
+
+async function addNote(note: Partial<Note>) {
+  let note_ = {
+    text: note.text!,
+    time: note.time!,
+    type: note.type!,
+    scope: note.scope!,
+  };
+  if (!note.id) await db.insert(notesT).values(note_);
+  else await db.update(notesT).set(note_).where(eq(notesT.id, note.id));
+}
+
+async function delNote(note: Partial<Note>) {
+  if (!note.id) return;
+  else await db.delete(notesT).where(eq(notesT.id, note.id));
 }
 
 const stylesheet = StyleSheet.create({

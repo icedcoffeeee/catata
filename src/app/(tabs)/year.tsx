@@ -1,9 +1,10 @@
 import { Text } from "@/components";
 import { NotesList } from "@/components/notes";
-import { NoteScope, getNotes } from "@/data";
+import { NoteScope, db, notesT } from "@/db";
 import { useModal } from "@/store";
 import { styles } from "@/styles";
 import { getFullMDY, getMDY } from "@/utils";
+import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 import { useState } from "react";
 import { FlatList, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -15,6 +16,8 @@ export default function YearPage() {
     .fill("")
     .map((_, i) => getFullMDY(new Date(1, i + 1).getTime()).M);
 
+  const { data: allNotes } = useLiveQuery(db.select().from(notesT));
+
   const { openE: openN } = useModal();
 
   return (
@@ -25,7 +28,7 @@ export default function YearPage() {
       <FlatList
         data={months}
         renderItem={({ item: month, index: mon }) => {
-          const notes = getNotes().filter((n) => {
+          const notes = allNotes.filter((n) => {
             const { M, Y } = getMDY(n.time);
             return n.scope === NoteScope.YEAR && M === mon + 1 && Y === year;
           });

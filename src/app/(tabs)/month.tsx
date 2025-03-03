@@ -1,9 +1,10 @@
 import { Text } from "@/components";
 import { NotesList } from "@/components/notes";
-import { NoteScope, getNotes } from "@/data";
+import { NoteScope, db, notesT } from "@/db";
 import { useModal } from "@/store";
 import { styles } from "@/styles";
 import { getFullMDY, getMDY } from "@/utils";
+import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 import { FlatList, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import colors from "tailwindcss/colors";
@@ -22,6 +23,8 @@ export function MonthPage({ date }: { date: Date }) {
   const { M: pageMon, Y: pageYear } = getMDY(date.getTime());
   const { M: fullMon, Y: fullYear } = getFullMDY(date.getTime());
 
+  const { data: allNotes } = useLiveQuery(db.select().from(notesT));
+
   const { openE } = useModal();
 
   return (
@@ -33,7 +36,7 @@ export function MonthPage({ date }: { date: Date }) {
         data={dates}
         contentContainerStyle={styles.scroll}
         renderItem={({ item: date, index }) => {
-          const notes = getNotes()
+          const notes = allNotes
             .filter((n) => {
               const { M, D } = getMDY(n.time);
               return (

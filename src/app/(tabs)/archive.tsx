@@ -1,16 +1,20 @@
 import { SafeAreaView, Text, TextInput, View } from "@/components";
 import { IonIcons } from "@/components/icons";
 import { NotesList } from "@/components/notes";
-import { getNotes } from "@/data";
+import { db, notesT } from "@/db";
 import { styles } from "@/styles";
 import { getMDY, groupArr, longDate } from "@/utils";
+import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 import { FlatList, StyleSheet, TouchableOpacity } from "react-native";
 import colors from "tailwindcss/colors";
 
 export default function ArchivePage() {
   const { M: M_, D: D_, Y: Y_ } = getMDY(new Date().getTime());
+
+  const { data: allNotes } = useLiveQuery(db.select().from(notesT));
+
   const groupedArr = groupArr(
-    getNotes()
+    allNotes
       .filter((n) => {
         const { M, D, Y } = getMDY(n.time);
         return (
