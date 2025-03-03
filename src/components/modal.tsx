@@ -4,9 +4,8 @@ import {
   StyleSheet,
   TextInput as TextInputRN,
   TouchableOpacity,
-  View,
 } from "react-native";
-import { Text, TextInput } from ".";
+import { Text, TextInput, View } from ".";
 import colors from "tailwindcss/colors";
 import { UseState, longDate } from "@/utils";
 import { LinearGradient } from "expo-linear-gradient";
@@ -28,7 +27,7 @@ export function Modal({ state, note }: Modal) {
   // ^^ pull out keyboard
 
   const [text, setText] = useState(note?.text);
-  const [epoch, setEpoch] = useState(note?.epoch ?? new Date().getTime());
+  const [epoch, _setEpoch] = useState(note?.epoch ?? new Date().getTime());
   const [scope, setScope] = useState(note?.scope ?? NoteScope.DAY);
   const [isNote, setIsNote] = useState(true);
 

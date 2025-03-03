@@ -46,13 +46,22 @@ export default function RootLayout() {
     >
       <Stack
         screenOptions={{
+          headerShown: false,
           navigationBarColor: colors.zinc[900],
           contentStyle: { backgroundColor: "#00000000" },
         }}
       >
+        <Stack.Screen name="(tabs)"></Stack.Screen>
         <Stack.Screen
-          name="(tabs)"
-          options={{ headerShown: false }}
+          name="settings"
+          options={{
+            title: "Settings",
+            headerShown: true,
+            headerStyle: { backgroundColor: colors.zinc[900] },
+            headerTintColor: colors.zinc[100],
+            navigationBarColor: colors.zinc[950],
+            contentStyle: { backgroundColor: colors.zinc[950] },
+          }}
         ></Stack.Screen>
       </Stack>
       <StatusBar style="light"></StatusBar>
