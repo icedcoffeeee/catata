@@ -16,15 +16,15 @@ import { styles } from "@/styles";
 import { useModal } from "@/store";
 
 export function Modal() {
-  const { modal, close, note, empty } = useModal();
+  const { modal, close, set, ...note } = useModal();
 
   const input = useRef<TextInputRN>(null);
   setTimeout(() => input.current?.focus(), 100);
   // ^^ pull out keyboard
 
-  const text = note?.text;
-  const time = note?.time ?? empty?.time ?? new Date().getTime();
-  const scope = note?.scope ?? empty?.scope ?? NoteScope.DAY;
+  const text = note?.text ?? "";
+  const time = note?.time ?? new Date().getTime();
+  const scope = note?.scope ?? NoteScope.DAY;
   const isNote = note ? note.type === NoteType.NOTE : true;
 
   return (
@@ -62,6 +62,7 @@ export function Modal() {
             ref={input}
             placeholder={`New ${isNote ? "note" : "todo"}...`}
             value={note?.text}
+            onChangeText={(text) => set({ text })}
             multiline
           ></TextInput>
         </View>
@@ -70,10 +71,10 @@ export function Modal() {
             style={[
               styles.row,
               stylesheet.submit,
-              { opacity: text ? 1 : 0.4 },
+              { opacity: !!text ? 1 : 0.4 },
               { backgroundColor: colors.blue[500] },
             ]}
-            disabled={!!text}
+            disabled={!text}
           >
             <Feather name="plus"></Feather>
             <Text>Add subnote</Text>
@@ -83,8 +84,9 @@ export function Modal() {
               style={[
                 styles.row,
                 stylesheet.submit,
-                { opacity: text ? 1 : 0.4 },
+                { opacity: !!text ? 1 : 0.4 },
               ]}
+              disabled={!text}
             >
               <Feather name="trash"></Feather>
               <Text>Delete</Text>
@@ -93,8 +95,9 @@ export function Modal() {
               style={[
                 styles.row,
                 stylesheet.submit,
-                { opacity: text ? 1 : 0.4 },
+                { opacity: !!text ? 1 : 0.4 },
               ]}
+              disabled={!text}
             >
               <Feather name="send"></Feather>
               <Text>Add {isNote ? "note" : "todo"}</Text>
