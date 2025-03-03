@@ -1,11 +1,14 @@
 import { create } from "zustand";
-import { Note } from "./data";
+import { Note, NoteScope } from "./data";
+
+type New = { time?: number; scope?: NoteScope };
 
 type Modal = {
   modal: boolean;
   note?: Note;
-  newTime?: number;
-  open: (noteXtime?: Note | number) => void;
+  empty?: New;
+  open: (note?: Note) => void;
+  openE: (note?: New) => void;
   close: () => void;
 };
 
@@ -13,11 +16,7 @@ export const useModal = create<Modal>((set) => ({
   modal: false,
   note: undefined,
   newTime: undefined,
-  open: (noteXtime) =>
-    set({
-      modal: true,
-      note: typeof noteXtime === "object" ? noteXtime : undefined,
-      newTime: typeof noteXtime !== "object" ? noteXtime : undefined,
-    }),
+  open: (note) => set({ modal: true, note }),
+  openE: (note) => set({ modal: true, note: undefined, empty: note }),
   close: () => set({ modal: false }),
 }));

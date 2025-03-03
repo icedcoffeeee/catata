@@ -3,12 +3,22 @@ import { IonIcons } from "@/components/icons";
 import { NotesList } from "@/components/notes";
 import { getNotes } from "@/data";
 import { styles } from "@/styles";
-import { groupArr, longDate } from "@/utils";
+import { getMDY, groupArr, longDate } from "@/utils";
 import { FlatList, StyleSheet, TouchableOpacity } from "react-native";
 import colors from "tailwindcss/colors";
 
 export default function ArchivePage() {
-  const groupedArr = groupArr(getNotes(), ({ time }) => longDate(time));
+  const { M: M_, D: D_, Y: Y_ } = getMDY(new Date().getTime());
+  const groupedArr = groupArr(
+    getNotes().filter((n) => {
+      const { M, D, Y } = getMDY(n.time);
+      return (
+        new Date(Y_, M_, D_).getTime() - new Date(Y, M, D).getTime() >
+        24 * 60 * 60 * 1000
+      );
+    }),
+    ({ time }) => longDate(time),
+  );
 
   return (
     <SafeAreaView>

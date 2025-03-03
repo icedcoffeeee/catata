@@ -12,7 +12,7 @@ export default function ThisDayPage() {
 
 export function DayNotes({ dayTime }: { dayTime: number }) {
   const notes = getNotes()
-    .filter((a) => a.time - dayTime < 24 * 60 * 60 * 1000)
+    .filter((a) => Math.abs(a.time - dayTime) < 24 * 60 * 60 * 1000)
     .sort((a, b) => b.scope - a.scope);
   return (
     <SafeAreaView>

@@ -69,7 +69,7 @@ export const getNotes: () => Note[] = () => [
   {
     id: 7,
     text: "Year Note",
-    time: new Date(2025, 2, 3).getTime(),
+    time: new Date(2025, 1, 3).getTime(),
     scope: NoteScope.YEAR,
     type: NoteType.TODO,
     subnoteIDs: [],

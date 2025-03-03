@@ -15,7 +15,7 @@ export default function YearPage() {
     .fill("")
     .map((_, i) => getFullMDY(new Date(1, i + 1).getTime()).M);
 
-  const { open } = useModal();
+  const { openE: openN } = useModal();
 
   return (
     <SafeAreaView>
@@ -38,7 +38,12 @@ export default function YearPage() {
               }}
             >
               <TouchableOpacity
-                onPress={() => open(new Date(year, mon, 1).getTime())}
+                onPress={() =>
+                  openN({
+                    time: new Date(year, mon, 1).getTime(),
+                    scope: NoteScope.YEAR,
+                  })
+                }
               >
                 <Text style={[styles.mono, { marginBottom: 5 }]}>{month}</Text>
               </TouchableOpacity>

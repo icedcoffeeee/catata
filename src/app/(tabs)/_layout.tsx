@@ -6,7 +6,7 @@ import { StyleSheet, TouchableOpacity } from "react-native";
 import colors from "tailwindcss/colors";
 
 export default function TabsLayout() {
-  const { open } = useModal();
+  const { openE } = useModal();
   return (
     <>
       <Tabs
@@ -43,7 +43,7 @@ export default function TabsLayout() {
           ></Tabs.Screen>
         ))}
       </Tabs>
-      <TouchableOpacity onPress={() => open()} style={stylesheet.addButton}>
+      <TouchableOpacity onPress={() => openE()} style={stylesheet.addButton}>
         <Feather name="plus" size={20}></Feather>
       </TouchableOpacity>
       <Modal></Modal>

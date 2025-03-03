@@ -16,15 +16,15 @@ import { styles } from "@/styles";
 import { useModal } from "@/store";
 
 export function Modal() {
-  const { modal, close, note, newTime } = useModal();
+  const { modal, close, note, empty } = useModal();
 
   const input = useRef<TextInputRN>(null);
   setTimeout(() => input.current?.focus(), 100);
   // ^^ pull out keyboard
 
   const text = note?.text;
-  const time = note?.time ?? newTime ?? new Date().getTime();
-  const scope = note?.scope ?? NoteScope.DAY;
+  const time = note?.time ?? empty?.time ?? new Date().getTime();
+  const scope = note?.scope ?? empty?.scope ?? NoteScope.DAY;
   const isNote = note ? note.type === NoteType.NOTE : true;
 
   return (

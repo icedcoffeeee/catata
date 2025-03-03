@@ -22,7 +22,7 @@ export function MonthPage({ date }: { date: Date }) {
   const { M: pageMon, Y: pageYear } = getMDY(date.getTime());
   const { M: fullMon, Y: fullYear } = getFullMDY(date.getTime());
 
-  const { open } = useModal();
+  const { openE } = useModal();
 
   return (
     <SafeAreaView>
@@ -56,7 +56,10 @@ export function MonthPage({ date }: { date: Date }) {
             >
               <TouchableOpacity
                 onPress={() =>
-                  open(new Date(pageYear, pageMon - 1, date).getTime())
+                  openE({
+                    time: new Date(pageYear, pageMon - 1, date).getTime(),
+                    scope: NoteScope.MONTH,
+                  })
                 }
               >
                 <Text style={styles.mono}>
