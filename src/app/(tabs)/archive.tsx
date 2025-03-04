@@ -4,25 +4,28 @@ import { NotesList } from "@/components/note-list";
 import { db, notesT } from "@/db";
 import { styles } from "@/styles";
 import { getMDY, groupArr, longDate } from "@/utils";
+import { and, isNull, lt } from "drizzle-orm";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 import { FlatList, StyleSheet, TouchableOpacity } from "react-native";
 import colors from "tailwindcss/colors";
 
 export default function ArchivePage() {
-  const { M: M_, D: D_, Y: Y_ } = getMDY(new Date().getTime());
+  const { M, D, Y } = getMDY(new Date().getTime());
 
-  const { data: notes_ } = useLiveQuery(db.select().from(notesT));
+  const { data: notes_ } = useLiveQuery(
+    db
+      .select()
+      .from(notesT)
+      .where(
+        and(
+          isNull(notesT.parentID),
+          lt(notesT.time, new Date(Y, M - 1, D).getTime()),
+        ),
+      ),
+  );
 
   const groupedArr = groupArr(
-    notes_
-      .filter((n) => {
-        const { M, D, Y } = getMDY(n.time);
-        return (
-          new Date(Y_, M_, D_).getTime() - new Date(Y, M, D).getTime() >
-          24 * 60 * 60 * 1000
-        );
-      })
-      .sort((a, b) => b.time - a.time),
+    notes_.sort((a, b) => b.time - a.time),
     ({ time }) => longDate(time),
   );
 
