@@ -1,6 +1,6 @@
 import { Text } from "@/components";
-import { useModal } from "@/components/modal";
-import { NotesList } from "@/components/notes";
+import { useNoteModal } from "@/components/note-modal";
+import { NotesList } from "@/components/note-list";
 import { NoteScope, db, notesT } from "@/db";
 import { styles } from "@/styles";
 import { getFullMDY, getMDY } from "@/utils";
@@ -9,6 +9,7 @@ import { useState } from "react";
 import { FlatList, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import colors from "tailwindcss/colors";
+import { eq } from "drizzle-orm";
 
 export default function YearPage() {
   const [year, _setYear] = useState(new Date().getFullYear());
@@ -16,9 +17,11 @@ export default function YearPage() {
     .fill("")
     .map((_, i) => getFullMDY(new Date(1, i + 1).getTime()).M);
 
-  const { data: allNotes } = useLiveQuery(db.select().from(notesT));
+  const { data: notes_ } = useLiveQuery(
+    db.select().from(notesT).where(eq(notesT.scope, NoteScope.YEAR)),
+  );
 
-  const { openEmpty } = useModal();
+  const modal = useNoteModal();
 
   return (
     <SafeAreaView>
@@ -28,9 +31,9 @@ export default function YearPage() {
       <FlatList
         data={months}
         renderItem={({ item: month, index: mon }) => {
-          const notes = allNotes.filter((n) => {
+          const notes = notes_.filter((n) => {
             const { M, Y } = getMDY(n.time);
-            return n.scope === NoteScope.YEAR && M === mon + 1 && Y === year;
+            return M === mon + 1 && Y === year;
           });
           return (
             <View
@@ -42,8 +45,8 @@ export default function YearPage() {
             >
               <TouchableOpacity
                 onPress={() =>
-                  openEmpty({
-                    time: new Date(year, mon, 1).getTime(),
+                  modal.open({
+                    time: new Date(year, mon).getTime(),
                     scope: NoteScope.YEAR,
                   })
                 }

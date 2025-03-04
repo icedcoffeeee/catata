@@ -1,8 +1,9 @@
 import { Text } from "@/components";
-import { NotesList } from "@/components/notes";
+import { NotesList } from "@/components/note-list";
 import { db, notesT } from "@/db";
 import { styles } from "@/styles";
 import { getMDY, longDate } from "@/utils";
+import { isNull } from "drizzle-orm";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -12,9 +13,11 @@ export default function ThisDayPage() {
 }
 
 export function DayNotes({ dayTime }: { dayTime: number }) {
-  const { data: allNotes } = useLiveQuery(db.select().from(notesT));
+  const { data: notes_ } = useLiveQuery(
+    db.select().from(notesT).where(isNull(notesT.parentID)),
+  );
 
-  const notes = allNotes
+  const notes = notes_
     .filter((a) => Math.abs(a.time - dayTime) < 24 * 60 * 60 * 1000)
     .sort((a, b) => a.time - b.time)
     .sort((a, b) => b.scope - a.scope);
@@ -23,7 +26,7 @@ export function DayNotes({ dayTime }: { dayTime: number }) {
       <Text style={[styles.h1, { justifyContent: "space-between" }]}>
         {longDate(dayTime)}
       </Text>
-      <NotesList notes={notes.filter((n) => !n.parentID)}></NotesList>
+      <NotesList notes={notes}></NotesList>
     </SafeAreaView>
   );
 }

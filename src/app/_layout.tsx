@@ -1,4 +1,4 @@
-import { Modal } from "@/components/modal";
+import { NoteModal } from "@/components/note-modal";
 import { db, expo_sqlite } from "@/db";
 import migrations from "@/drizzle/migrations";
 import { Karla_400Regular } from "@expo-google-fonts/karla";
@@ -77,7 +77,7 @@ export default function RootLayout() {
         ></Stack.Screen>
       </Stack>
       <StatusBar style="light"></StatusBar>
-      <Modal></Modal>
+      <NoteModal></NoteModal>
     </LinearGradient>
   );
 }

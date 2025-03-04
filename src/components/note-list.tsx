@@ -9,12 +9,13 @@ import {
 import { FAGlyphs, FontAwesome } from "./icons";
 import { styles } from "@/styles";
 import { getFullMDY, getMDY } from "@/utils";
-import { useModal } from "@/components/modal";
-import { Note, db, notesT } from "@/db";
+import { useNoteModal } from "@/components/note-modal";
+import { NoteS, db, notesT } from "@/db";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
+import { eq } from "drizzle-orm";
 
 type NotesList = {
-  notes: Note[];
+  notes: NoteS[];
   dates?: boolean;
   fulldates?: boolean;
   nochildren?: boolean;
@@ -28,7 +29,7 @@ export function NotesList({
   nochildren,
   style,
 }: NotesList) {
-  const { data: allNotes } = useLiveQuery(db.select().from(notesT));
+  const { data: notes_ } = useLiveQuery(db.select().from(notesT));
 
   return (
     <FlatList
@@ -40,7 +41,7 @@ export function NotesList({
           <NoteText note={n} date={dates} fulldate={fulldates}></NoteText>
           {!nochildren && (
             <NotesList
-              notes={allNotes.filter((a) => a.parentID === n.id)}
+              notes={notes_.filter((a) => a.parentID === n.id)}
               style={{ marginLeft: 15 }}
             ></NotesList>
           )}
@@ -50,14 +51,17 @@ export function NotesList({
   );
 }
 
-type NoteText = { note: Note; date?: boolean; fulldate?: boolean };
+type NoteText = { note: NoteS; date?: boolean; fulldate?: boolean };
 function NoteText({ note, date, fulldate }: NoteText) {
-  const { openNote } = useModal();
+  const modal = useNoteModal();
   const { D: day } = getMDY(note.time);
   const { M: fullMon } = getFullMDY(note.time);
+  const { data: parent } = useLiveQuery(
+    db.query.notesT.findFirst({ where: eq(notesT.id, note.parentID!) }),
+  );
   return (
     <TouchableOpacity
-      onPress={() => openNote(note)}
+      onPress={() => modal.open({ note, parent })}
       style={[styles.row, { marginBottom: 5 }]}
     >
       {date && <Text style={styles.mono}>{day}:</Text>}

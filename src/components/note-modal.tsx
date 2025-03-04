@@ -1,0 +1,220 @@
+import { LinearGradient } from "expo-linear-gradient";
+import { useRef } from "react";
+import {
+  Modal,
+  Pressable,
+  StyleSheet,
+  TextInput as TextInputRN,
+  TouchableOpacity,
+  TouchableOpacityProps,
+  View,
+} from "react-native";
+import { Text, TextInput } from ".";
+import { FGlyphs, Feather, FontAwesome, IonIcons } from "./icons";
+import { styles } from "@/styles";
+import colors from "tailwindcss/colors";
+import { longDate } from "@/utils";
+import { create } from "zustand";
+import { NoteS, NoteI, NoteScope, NoteType, addNote, delNote } from "@/db";
+
+type NoteModal = {
+  shown: boolean;
+  note?: NoteI;
+  parent?: NoteI;
+  time?: number;
+  scope?: NoteScope;
+
+  open: (param: {
+    note?: NoteS;
+    parent?: NoteS;
+    time?: number;
+    scope?: NoteScope;
+  }) => void;
+  close: () => void;
+  clear: () => void;
+  set: (param: Partial<NoteI>) => void;
+};
+
+const defaultNote: NoteI = {
+  id: undefined,
+  text: "",
+  time: new Date().getTime(),
+  type: NoteType.NOTE,
+  scope: NoteScope.DAY,
+  parentID: null,
+};
+
+const defaultModal = {
+  shown: false,
+  note: undefined,
+  parent: undefined,
+  time: undefined,
+  scope: undefined,
+};
+
+export const useNoteModal = create<NoteModal>((set, get) => ({
+  ...defaultModal,
+
+  open: (params) => set({ shown: true, ...params }),
+  close: () => set({ ...defaultModal, shown: false }),
+  clear: () => set({ ...defaultModal, shown: true }),
+  set: (noteParams) =>
+    set({ note: { ...defaultNote, ...get().note, ...noteParams } }),
+}));
+
+export function NoteModal() {
+  const input = useRef<TextInputRN>(null);
+  setTimeout(() => input.current?.focus(), 100);
+  // ^^ pull out keyboard
+
+  let { note: selected, parent, time, scope, ...modal } = useNoteModal();
+  const note: NoteI = selected ?? {
+    ...defaultNote,
+    time: time ?? defaultNote.time,
+    scope: scope ?? defaultNote.scope,
+  };
+
+  const typeNote = note.type === NoteType.NOTE;
+
+  return (
+    <Modal
+      transparent
+      animationType="slide"
+      visible={modal.shown}
+      onRequestClose={modal.close}
+    >
+      <LinearGradient
+        colors={["#00000088", "#00000000"]}
+        start={{ x: 0, y: 0.5 }}
+        end={{ x: 0, y: 0 }}
+      >
+        <Pressable onPress={modal.close} style={styles.modal}></Pressable>
+      </LinearGradient>
+
+      <View style={stylesheet.container}>
+        <View style={[styles.row, { justifyContent: "space-between" }]}>
+          <TouchableOpacity>
+            <Text style={styles.mono}>{longDate(note.time)}</Text>
+          </TouchableOpacity>
+          <View style={styles.row}>
+            <TouchableOpacity
+              onPress={() => modal.set({ type: (note.type + 1) % 2 })}
+            >
+              <Text>{typeNote ? "Note" : "Todo"}</Text>
+            </TouchableOpacity>
+            <Feather name="minus"></Feather>
+            <TouchableOpacity
+              onPress={() => modal.set({ scope: (note.scope + 1) % 3 })}
+            >
+              <Text>{["Day", "Month", "Year"][note.scope]}</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        {parent && (
+          <View
+            style={[
+              styles.row,
+              { opacity: 0.7, transform: [{ translateY: 8 }] },
+            ]}
+          >
+            <IonIcons name="return-up-forward"></IonIcons>
+            <Text>{parent.text}</Text>
+          </View>
+        )}
+
+        <View style={styles.row}>
+          <FontAwesome name={typeNote ? "circle" : "circle-o"}></FontAwesome>
+          <TextInput
+            ref={input}
+            placeholder={`New ${typeNote ? "note" : "todo"}...`}
+            value={note?.text}
+            onChangeText={(text) => modal.set({ text })}
+            multiline
+          ></TextInput>
+        </View>
+
+        <View style={[styles.row, { justifyContent: "space-between" }]}>
+          <Button
+            icon="plus"
+            style={{ backgroundColor: colors.blue[500] }}
+            onPress={async () => {
+              const parent = await addNote(note);
+              modal.clear();
+              modal.open({ parent });
+              modal.set({ parentID: parent!.id });
+            }}
+            disabled={!note.text}
+          >
+            Add subnote
+          </Button>
+          <View style={[styles.row, { justifyContent: "flex-end" }]}>
+            <Button
+              icon="trash"
+              onPress={async () => {
+                await delNote(note);
+                modal.close();
+              }}
+              disabled={!note.text}
+            >
+              Delete
+            </Button>
+            <Button
+              icon="send"
+              onPress={async () => {
+                await addNote(note);
+                modal.clear();
+              }}
+              disabled={!note.text}
+            >
+              Add {typeNote ? "note" : "todo"}
+            </Button>
+          </View>
+        </View>
+      </View>
+    </Modal>
+  );
+}
+
+function Button({
+  icon,
+  children,
+  style,
+  ...props
+}: TouchableOpacityProps & { icon: FGlyphs }) {
+  const note = useNoteModal((n) => n.note);
+  return (
+    <TouchableOpacity
+      style={[
+        styles.row,
+        stylesheet.button,
+        { opacity: !!note?.text ? 1 : 0.4 },
+        style,
+      ]}
+      {...props}
+    >
+      <Feather name={icon}></Feather>
+      <Text>{children}</Text>
+    </TouchableOpacity>
+  );
+}
+
+const stylesheet = StyleSheet.create({
+  container: {
+    width: "100%",
+    position: "absolute",
+    bottom: 0,
+    padding: 20,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    backgroundColor: colors.zinc[900],
+    elevation: 5,
+  },
+  button: {
+    marginVertical: 4,
+    paddingVertical: 2,
+    paddingHorizontal: 4,
+    borderRadius: 5,
+    backgroundColor: colors.red[700],
+  },
+});

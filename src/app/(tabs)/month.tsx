@@ -1,6 +1,6 @@
 import { Text } from "@/components";
-import { useModal } from "@/components/modal";
-import { NotesList } from "@/components/notes";
+import { useNoteModal } from "@/components/note-modal";
+import { NotesList } from "@/components/note-list";
 import { NoteScope, db, notesT } from "@/db";
 import { styles } from "@/styles";
 import { getFullMDY, getMDY } from "@/utils";
@@ -8,6 +8,7 @@ import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 import { FlatList, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import colors from "tailwindcss/colors";
+import { eq } from "drizzle-orm";
 
 export default function ThisMonthPage() {
   return <MonthPage date={new Date()}></MonthPage>;
@@ -20,12 +21,15 @@ export function MonthPage({ date }: { date: Date }) {
   const dates = Array(new Date(1, date.getMonth() + 1, -1).getDate() + 1)
     .fill(0)
     .map((_, i) => i + 1);
+
   const { M: pageMon, Y: pageYear } = getMDY(date.getTime());
   const { M: fullMon, Y: fullYear } = getFullMDY(date.getTime());
 
-  const { data: allNotes } = useLiveQuery(db.select().from(notesT));
+  const { data: notes_ } = useLiveQuery(
+    db.select().from(notesT).where(eq(notesT.scope, NoteScope.MONTH)),
+  );
 
-  const { openEmpty } = useModal();
+  const modal = useNoteModal();
 
   return (
     <SafeAreaView>
@@ -35,13 +39,11 @@ export function MonthPage({ date }: { date: Date }) {
       <FlatList
         data={dates}
         contentContainerStyle={styles.scroll}
-        renderItem={({ item: date, index }) => {
-          const notes = allNotes
+        renderItem={({ item: date }) => {
+          const notes = notes_
             .filter((n) => {
               const { M, D } = getMDY(n.time);
-              return (
-                n.scope >= NoteScope.MONTH && M === pageMon && D === index + 1
-              );
+              return M === pageMon && D === date;
             })
             .sort((a, b) => b.scope - a.scope);
           const weekday = weeks[(startWeek + date) % weeks.length];
@@ -59,7 +61,7 @@ export function MonthPage({ date }: { date: Date }) {
             >
               <TouchableOpacity
                 onPress={() =>
-                  openEmpty({
+                  modal.open({
                     time: new Date(pageYear, pageMon - 1, date).getTime(),
                     scope: NoteScope.MONTH,
                   })

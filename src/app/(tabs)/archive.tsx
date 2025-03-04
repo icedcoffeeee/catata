@@ -1,6 +1,6 @@
 import { SafeAreaView, Text, TextInput, View } from "@/components";
 import { IonIcons } from "@/components/icons";
-import { NotesList } from "@/components/notes";
+import { NotesList } from "@/components/note-list";
 import { db, notesT } from "@/db";
 import { styles } from "@/styles";
 import { getMDY, groupArr, longDate } from "@/utils";
@@ -11,10 +11,10 @@ import colors from "tailwindcss/colors";
 export default function ArchivePage() {
   const { M: M_, D: D_, Y: Y_ } = getMDY(new Date().getTime());
 
-  const { data: allNotes } = useLiveQuery(db.select().from(notesT));
+  const { data: notes_ } = useLiveQuery(db.select().from(notesT));
 
   const groupedArr = groupArr(
-    allNotes
+    notes_
       .filter((n) => {
         const { M, D, Y } = getMDY(n.time);
         return (
