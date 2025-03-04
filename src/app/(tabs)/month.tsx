@@ -1,7 +1,7 @@
 import { Text } from "@/components";
+import { useModal } from "@/components/modal";
 import { NotesList } from "@/components/notes";
 import { NoteScope, db, notesT } from "@/db";
-import { useModal } from "@/store";
 import { styles } from "@/styles";
 import { getFullMDY, getMDY } from "@/utils";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
@@ -25,7 +25,7 @@ export function MonthPage({ date }: { date: Date }) {
 
   const { data: allNotes } = useLiveQuery(db.select().from(notesT));
 
-  const { openE } = useModal();
+  const { openEmpty } = useModal();
 
   return (
     <SafeAreaView>
@@ -59,7 +59,7 @@ export function MonthPage({ date }: { date: Date }) {
             >
               <TouchableOpacity
                 onPress={() =>
-                  openE({
+                  openEmpty({
                     time: new Date(pageYear, pageMon - 1, date).getTime(),
                     scope: NoteScope.MONTH,
                   })

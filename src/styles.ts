@@ -21,4 +21,8 @@ export const styles = StyleSheet.create({
     alignItems: "baseline",
     gap: 10,
   },
+  modal: {
+    width: "100%",
+    height: "100%",
+  },
 });

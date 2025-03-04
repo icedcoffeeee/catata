@@ -13,12 +13,59 @@ import { useRef } from "react";
 import { NoteScope, NoteType } from "@/data";
 import { Feather, FontAwesome, IonIcons } from "./icons";
 import { styles } from "@/styles";
-import { useModal } from "@/store";
 import { Note, db, notesT } from "@/db";
 import { eq } from "drizzle-orm";
+import { create } from "zustand";
+
+type Modal = {
+  modal: boolean;
+
+  id?: number;
+  text: string;
+  time: number;
+  scope: NoteScope;
+  type: NoteType;
+  parentID?: number;
+  parent?: Note;
+
+  openNote: (note?: Partial<Omit<Note, "parentID">>) => void;
+  openEmpty: (note?: Pick<Note, "time" | "scope">) => void;
+  closeNote: () => void;
+  setNote: (
+    note: Partial<Omit<Note, "parentID"> & { parentID: number; parent: Note }>,
+  ) => void;
+  resetNote: () => void;
+};
+
+const initial = {
+  modal: false,
+
+  id: undefined,
+  text: "",
+  time: new Date().getTime(),
+  scope: NoteScope.DAY,
+  type: NoteType.NOTE,
+
+  parentID: undefined,
+  parent: undefined,
+};
+
+export const useModal = create<Modal>((set, get) => ({
+  ...initial,
+
+  openNote: (note) => set({ modal: true, ...note }),
+  openEmpty: (note) => {
+    get().resetNote();
+    get().openNote(note);
+  },
+  closeNote: () => set({ modal: false }),
+  setNote: (note) => set({ ...note }),
+  resetNote: () => set({ ...initial }),
+}));
 
 export function Modal() {
-  const { modal, openE, close, set, reset, ...note } = useModal();
+  const { modal, openEmpty, closeNote, setNote, resetNote, ...note } =
+    useModal();
 
   const input = useRef<TextInputRN>(null);
   setTimeout(() => input.current?.focus(), 100);
@@ -34,14 +81,14 @@ export function Modal() {
       transparent
       animationType="slide"
       visible={modal}
-      onRequestClose={close}
+      onRequestClose={closeNote}
     >
       <LinearGradient
         colors={["#00000088", "#00000000"]}
         start={{ x: 0, y: 0.5 }}
         end={{ x: 0, y: 0 }}
       >
-        <Pressable onPress={close} style={stylesheet.modal}></Pressable>
+        <Pressable onPress={closeNote} style={styles.modal}></Pressable>
       </LinearGradient>
       <View style={stylesheet.container}>
         <View style={[styles.row, { justifyContent: "space-between" }]}>
@@ -50,13 +97,13 @@ export function Modal() {
           </TouchableOpacity>
           <View style={styles.row}>
             <TouchableOpacity
-              onPress={() => set({ type: (note.type + 1) % 2 })}
+              onPress={() => setNote({ type: (note.type + 1) % 2 })}
             >
               <Text>{isNote ? "Note" : "Todo"}</Text>
             </TouchableOpacity>
             <Feather name="minus"></Feather>
             <TouchableOpacity
-              onPress={() => set({ scope: (note.scope + 1) % 3 })}
+              onPress={() => setNote({ scope: (note.scope + 1) % 3 })}
             >
               <Text>{["Day", "Month", "Year"][scope]}</Text>
             </TouchableOpacity>
@@ -77,7 +124,7 @@ export function Modal() {
             ref={input}
             placeholder={`New ${isNote ? "note" : "todo"}...`}
             value={note?.text}
-            onChangeText={(text) => set({ text })}
+            onChangeText={(text) => setNote({ text })}
             multiline
           ></TextInput>
         </View>
@@ -91,11 +138,11 @@ export function Modal() {
             ]}
             onPress={async () =>
               await addNote(note).then(async ({ id: parentID }) => {
-                openE();
+                openEmpty();
                 let parent = await db.query.notesT.findFirst({
                   where: eq(notesT.id, parentID),
                 });
-                set({ parentID, parent });
+                setNote({ parentID, parent });
               })
             }
             disabled={!text}
@@ -112,7 +159,7 @@ export function Modal() {
               ]}
               onPress={() => {
                 delNote(note);
-                reset();
+                resetNote();
               }}
               disabled={!text}
             >
@@ -127,7 +174,7 @@ export function Modal() {
               ]}
               onPress={() => {
                 addNote(note);
-                openE();
+                openEmpty();
               }}
               disabled={!text}
             >
@@ -166,10 +213,6 @@ async function delNote(note: Partial<Note>) {
 }
 
 const stylesheet = StyleSheet.create({
-  modal: {
-    width: "100%",
-    height: "100%",
-  },
   container: {
     width: "100%",
     position: "absolute",

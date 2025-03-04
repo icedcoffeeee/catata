@@ -9,7 +9,7 @@ import {
 import { FAGlyphs, FontAwesome } from "./icons";
 import { styles } from "@/styles";
 import { getFullMDY, getMDY } from "@/utils";
-import { useModal } from "@/store";
+import { useModal } from "@/components/modal";
 import { Note, db, notesT } from "@/db";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 
@@ -52,12 +52,12 @@ export function NotesList({
 
 type NoteText = { note: Note; date?: boolean; fulldate?: boolean };
 function NoteText({ note, date, fulldate }: NoteText) {
-  const { open } = useModal();
+  const { openNote } = useModal();
   const { D: day } = getMDY(note.time);
   const { M: fullMon } = getFullMDY(note.time);
   return (
     <TouchableOpacity
-      onPress={() => open(note)}
+      onPress={() => openNote(note)}
       style={[styles.row, { marginBottom: 5 }]}
     >
       {date && <Text style={styles.mono}>{day}:</Text>}

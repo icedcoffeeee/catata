@@ -1,12 +1,12 @@
 import { IonIcons, IonGlyphs, Feather } from "@/components/icons";
-import { Modal } from "@/components/modal";
-import { useModal } from "@/store";
+import { useModal } from "@/components/modal";
 import { Tabs } from "expo-router";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import colors from "tailwindcss/colors";
 
 export default function TabsLayout() {
-  const { openE } = useModal();
+  const { openEmpty } = useModal();
+
   return (
     <>
       <Tabs
@@ -43,10 +43,9 @@ export default function TabsLayout() {
           ></Tabs.Screen>
         ))}
       </Tabs>
-      <TouchableOpacity onPress={() => openE()} style={stylesheet.addButton}>
+      <TouchableOpacity onPress={() => openEmpty()} style={stylesheet.addButton}>
         <Feather name="plus" size={20}></Feather>
       </TouchableOpacity>
-      <Modal></Modal>
     </>
   );
 }
