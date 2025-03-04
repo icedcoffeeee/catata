@@ -1,12 +1,12 @@
 import { LinearGradient } from "expo-linear-gradient";
 import { useRef } from "react";
+import type { TouchableOpacityProps } from "react-native";
 import {
   Modal,
   Pressable,
   StyleSheet,
   TextInput as TextInputRN,
   TouchableOpacity,
-  TouchableOpacityProps,
   View,
 } from "react-native";
 import { Text, TextInput } from ".";
@@ -15,7 +15,8 @@ import { styles } from "@/styles";
 import colors from "tailwindcss/colors";
 import { longDate } from "@/utils";
 import { create } from "zustand";
-import { NoteS, NoteI, NoteScope, NoteType, addNote, delNote } from "@/db";
+import type { NoteS, NoteI } from "@/db";
+import { NoteScope, NoteType, addNote, delNote } from "@/db";
 
 type NoteModal = {
   shown: boolean;
@@ -24,15 +25,15 @@ type NoteModal = {
   time?: number;
   scope?: NoteScope;
 
-  open: (param: {
+  open(param: {
     note?: NoteS;
     parent?: NoteS;
     time?: number;
     scope?: NoteScope;
-  }) => void;
-  close: () => void;
-  clear: () => void;
-  set: (param: Partial<NoteI>) => void;
+  }): void;
+  close(): void;
+  clear(): void;
+  set(note: NoteI): void;
 };
 
 const defaultNote: NoteI = {
@@ -52,14 +53,13 @@ const defaultModal = {
   scope: undefined,
 };
 
-export const useNoteModal = create<NoteModal>((set, get) => ({
+export const useNoteModal = create<NoteModal>((set) => ({
   ...defaultModal,
 
   open: (params) => set({ shown: true, ...params }),
   close: () => set({ ...defaultModal, shown: false }),
   clear: () => set({ ...defaultModal, shown: true }),
-  set: (noteParams) =>
-    set({ note: { ...defaultNote, ...get().note, ...noteParams } }),
+  set: (note) => set({ note }),
 }));
 
 export function NoteModal() {
@@ -70,8 +70,8 @@ export function NoteModal() {
   let { note: selected, parent, time, scope, ...modal } = useNoteModal();
   const note: NoteI = selected ?? {
     ...defaultNote,
-    time: time ?? defaultNote.time,
-    scope: scope ?? defaultNote.scope,
+    time: !!time ? time : defaultNote.time,
+    scope: !!scope ? scope : defaultNote.scope,
   };
 
   const typeNote = note.type === NoteType.NOTE;
@@ -98,13 +98,15 @@ export function NoteModal() {
           </TouchableOpacity>
           <View style={styles.row}>
             <TouchableOpacity
-              onPress={() => modal.set({ type: (note.type + 1) % 2 })}
+              onPress={() => modal.set({ ...note, type: (note.type + 1) % 2 })}
             >
               <Text>{typeNote ? "Note" : "Todo"}</Text>
             </TouchableOpacity>
             <Feather name="minus"></Feather>
             <TouchableOpacity
-              onPress={() => modal.set({ scope: (note.scope + 1) % 3 })}
+              onPress={() =>
+                modal.set({ ...note, scope: (note.scope + 1) % 3 })
+              }
             >
               <Text>{["Day", "Month", "Year"][note.scope]}</Text>
             </TouchableOpacity>
@@ -129,7 +131,7 @@ export function NoteModal() {
             ref={input}
             placeholder={`New ${typeNote ? "note" : "todo"}...`}
             value={note?.text}
-            onChangeText={(text) => modal.set({ text })}
+            onChangeText={(text) => modal.set({ ...note, text })}
             multiline
           ></TextInput>
         </View>
@@ -142,7 +144,7 @@ export function NoteModal() {
               const parent = await addNote(note);
               modal.clear();
               modal.open({ parent });
-              modal.set({ parentID: parent!.id });
+              modal.set({ ...note, parentID: parent!.id });
             }}
             disabled={!note.text}
           >

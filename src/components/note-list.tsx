@@ -36,17 +36,19 @@ export function NotesList({
       data={notes}
       contentContainerStyle={styles.scroll}
       keyExtractor={(n) => n.id.toString()}
-      renderItem={({ item: n }) => (
-        <View style={style}>
-          <NoteText note={n} date={dates} fulldate={fulldates}></NoteText>
-          {!nochildren && (
-            <NotesList
-              notes={notes_.filter((a) => a.parentID === n.id)}
-              style={{ marginLeft: 15 }}
-            ></NotesList>
-          )}
-        </View>
-      )}
+      renderItem={({ item: n }) => {
+        return (
+          <View style={style}>
+            <NoteText note={n} date={dates} fulldate={fulldates}></NoteText>
+            {!nochildren && (
+              <NotesList
+                notes={notes_.filter((a) => a.parentID === n.id)}
+                style={{ marginLeft: 15 }}
+              ></NotesList>
+            )}
+          </View>
+        );
+      }}
     ></FlatList>
   );
 }
