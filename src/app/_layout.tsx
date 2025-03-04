@@ -55,6 +55,9 @@ export default function RootLayout() {
       <Stack
         screenOptions={{
           headerShown: false,
+          headerTitleStyle: {
+            fontFamily: "Karla_400Regular",
+          },
           navigationBarColor: colors.zinc[900],
           contentStyle: { backgroundColor: "#00000000" },
         }}
