@@ -11,14 +11,14 @@ import { longDate } from "@/utils";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRef } from "react";
 import { NoteScope, NoteType } from "@/data";
-import { Feather, FontAwesome } from "./icons";
+import { Feather, FontAwesome, IonIcons } from "./icons";
 import { styles } from "@/styles";
 import { useModal } from "@/store";
 import { Note, db, notesT } from "@/db";
 import { eq } from "drizzle-orm";
 
 export function Modal() {
-  const { modal, close, set, reset, ...note } = useModal();
+  const { modal, openE, close, set, reset, ...note } = useModal();
 
   const input = useRef<TextInputRN>(null);
   setTimeout(() => input.current?.focus(), 100);
@@ -62,6 +62,15 @@ export function Modal() {
             </TouchableOpacity>
           </View>
         </View>
+        {note.parent && (
+          <View style={[styles.row, { opacity: 0.7 }]}>
+            <IonIcons
+              name="return-up-forward"
+              style={{ transform: [{ translateY: 2 }] }}
+            ></IonIcons>
+            <Text>{note.parent.text}</Text>
+          </View>
+        )}
         <View style={styles.row}>
           <FontAwesome name={isNote ? "circle" : "circle-o"}></FontAwesome>
           <TextInput
@@ -80,6 +89,15 @@ export function Modal() {
               { opacity: !!text ? 1 : 0.4 },
               { backgroundColor: colors.blue[500] },
             ]}
+            onPress={async () =>
+              await addNote(note).then(async ({ id: parentID }) => {
+                openE();
+                let parent = await db.query.notesT.findFirst({
+                  where: eq(notesT.id, parentID),
+                });
+                set({ parentID, parent });
+              })
+            }
             disabled={!text}
           >
             <Feather name="plus"></Feather>
@@ -107,7 +125,10 @@ export function Modal() {
                 stylesheet.submit,
                 { opacity: !!text ? 1 : 0.4 },
               ]}
-              onPress={() => addNote(note)}
+              onPress={() => {
+                addNote(note);
+                openE();
+              }}
               disabled={!text}
             >
               <Feather name="send"></Feather>
@@ -126,9 +147,17 @@ async function addNote(note: Partial<Note>) {
     time: note.time!,
     type: note.type!,
     scope: note.scope!,
+    parentID: note.parentID!,
   };
-  if (!note.id) await db.insert(notesT).values(note_);
-  else await db.update(notesT).set(note_).where(eq(notesT.id, note.id));
+  if (!note.id) return (await db.insert(notesT).values(note_).returning())[0];
+  else
+    return (
+      await db
+        .update(notesT)
+        .set(note_)
+        .where(eq(notesT.id, note.id))
+        .returning()
+    )[0];
 }
 
 async function delNote(note: Partial<Note>) {
