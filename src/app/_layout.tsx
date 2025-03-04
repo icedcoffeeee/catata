@@ -1,8 +1,9 @@
-import { db } from "@/db";
+import { db, expo_sqlite } from "@/db";
 import migrations from "@/drizzle/migrations";
 import { Karla_400Regular } from "@expo-google-fonts/karla";
 import { FontAwesome } from "@expo/vector-icons";
 import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
+import { useDrizzleStudio } from "expo-drizzle-studio-plugin";
 import { useFonts } from "expo-font";
 import { LinearGradient } from "expo-linear-gradient";
 import { Stack } from "expo-router";
@@ -30,6 +31,7 @@ export default function RootLayout() {
   });
 
   const { success: DBsuccess, error: DBerror } = useMigrations(db, migrations);
+  useDrizzleStudio(expo_sqlite);
 
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
