@@ -1,8 +1,11 @@
 import colors from "tailwindcss/colors";
 
 /** color = rrggbb, opacity = 0 -- 1 */
-export const rgba_a = (color: string, opacity: number) =>
-  color + Math.floor(opacity * 255).toString(16);
+export const rgba_a = (color: string, opacity: number, argb?: boolean) => {
+  let cl = color.slice(1);
+  let op = Math.floor(opacity * 255).toString(16);
+  return "#" + ((argb ?? false) ? op + cl : cl + op);
+};
 
 export const theme = {
   dark: {

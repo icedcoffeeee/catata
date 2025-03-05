@@ -3,14 +3,10 @@ import { rgba_a, theme } from "./src/colors";
 const reactdtp = "@react-native-community/datetimepicker";
 const datetimepicker = { android: { datePicker: {} } };
 
-function color(
-  key: keyof typeof theme.dark,
-  swap?: boolean,
-  opacity?: number,
-) {
+function color(key: keyof typeof theme.dark, swap?: boolean, opacity?: number) {
   return {
-    light: rgba_a(theme[!swap ? "light" : "dark"][key], opacity ?? 1),
-    dark: rgba_a(theme[!swap ? "dark" : "light"][key], opacity ?? 1),
+    light: rgba_a(theme[!swap ? "light" : "dark"][key], opacity ?? 1, true),
+    dark: rgba_a(theme[!swap ? "dark" : "light"][key], opacity ?? 1, true),
   };
 }
 

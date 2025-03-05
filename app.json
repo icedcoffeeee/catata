@@ -37,44 +37,44 @@
           "android": {
             "datePicker": {
               "colorAccent": {
-                "light": "#3b82f6ff",
-                "dark": "#3b82f6ff"
+                "light": "#ff3b82f6",
+                "dark": "#ff3b82f6"
               },
               "colorControlActivated": {
-                "light": "#3b82f6ff",
-                "dark": "#3b82f6ff"
+                "light": "#ff3b82f6",
+                "dark": "#ff3b82f6"
               },
               "colorControlHighlight": {
-                "light": "#e4e4e7ff",
-                "dark": "#27272aff"
+                "light": "#ffe4e4e7",
+                "dark": "#ff27272a"
               },
               "selectableItemBackgroundBorderless": {
-                "light": "#e4e4e7ff",
-                "dark": "#27272aff"
+                "light": "#ffe4e4e7",
+                "dark": "#ff27272a"
               },
               "textColor": {
-                "light": "#18181bff",
-                "dark": "#f4f4f5ff"
+                "light": "#ff18181b",
+                "dark": "#fff4f4f5"
               },
               "textColorPrimary": {
-                "light": "#18181bff",
-                "dark": "#f4f4f5ff"
+                "light": "#ff18181b",
+                "dark": "#fff4f4f5"
               },
               "textColorPrimaryInverse": {
-                "light": "#f4f4f5ff",
-                "dark": "#18181bff"
+                "light": "#fff4f4f5",
+                "dark": "#ff18181b"
               },
               "textColorSecondary": {
-                "light": "#18181bcc",
-                "dark": "#f4f4f5cc"
+                "light": "#cc18181b",
+                "dark": "#ccf4f4f5"
               },
               "textColorSecondaryInverse": {
-                "light": "#f4f4f5cc",
-                "dark": "#18181bcc"
+                "light": "#ccf4f4f5",
+                "dark": "#cc18181b"
               },
               "windowBackground": {
-                "light": "#f4f4f5ff",
-                "dark": "#18181bff"
+                "light": "#fff4f4f5",
+                "dark": "#ff18181b"
               }
             }
           }
