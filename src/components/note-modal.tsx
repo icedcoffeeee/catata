@@ -144,7 +144,6 @@ export function NoteModal() {
               const parent = await addNote(note);
               modal.clear();
               modal.open({ parent });
-              modal.set({ ...note, parentID: parent!.id });
             }}
             disabled={!note.text}
           >
@@ -164,6 +163,7 @@ export function NoteModal() {
             <Button
               icon="send"
               onPress={async () => {
+                note.parentID = parent?.id;
                 await addNote(note);
                 modal.clear();
               }}
