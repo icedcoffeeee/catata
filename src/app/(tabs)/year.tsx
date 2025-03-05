@@ -25,7 +25,7 @@ export default function YearPage() {
 
   return (
     <SafeAreaView>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => openTime({ show: true })}>
         <Text style={styles.h1}>{year}</Text>
       </TouchableOpacity>
       <FlatList

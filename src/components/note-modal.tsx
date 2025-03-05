@@ -15,22 +15,20 @@ import { styles } from "@/styles";
 import colors from "tailwindcss/colors";
 import { longDate } from "@/utils";
 import { create } from "zustand";
-import type { NoteS, NoteI } from "@/db";
+import type { NoteI } from "@/db";
 import { NoteScope, NoteType, addNote, delNote } from "@/db";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 type NoteModal = {
   shown: boolean;
+  editDate: boolean;
+
   note?: NoteI;
   parent?: NoteI;
   time?: number;
   scope?: NoteScope;
 
-  open(param: {
-    note?: NoteS;
-    parent?: NoteS;
-    time?: number;
-    scope?: NoteScope;
-  }): void;
+  open(param: Partial<NoteModal>): void;
   close(): void;
   clear(): void;
   set(note: NoteI): void;
@@ -47,6 +45,7 @@ const defaultNote: NoteI = {
 
 const defaultModal = {
   shown: false,
+  editDate: false,
   note: undefined,
   parent: undefined,
   time: undefined,
@@ -56,7 +55,7 @@ const defaultModal = {
 export const useNoteModal = create<NoteModal>((set) => ({
   ...defaultModal,
 
-  open: (params) => set({ shown: true, ...params }),
+  open: (params) => set({ shown: true, editDate: false, ...params }),
   close: () => set({ ...defaultModal, shown: false }),
   clear: () => set({ ...defaultModal, shown: true }),
   set: (note) => set({ note }),
@@ -93,7 +92,7 @@ export function NoteModal() {
 
       <View style={stylesheet.container}>
         <View style={[styles.row, { justifyContent: "space-between" }]}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => modal.open({ editDate: true })}>
             <Text style={styles.mono}>{longDate(note.time)}</Text>
           </TouchableOpacity>
           <View style={styles.row}>
@@ -174,6 +173,20 @@ export function NoteModal() {
           </View>
         </View>
       </View>
+      {modal.editDate && (
+        <DateTimePicker
+          mode="date"
+          value={new Date(note.time)}
+          onChange={({ type }, date) => {
+            switch (type) {
+              case "set":
+                modal.open({ time: date?.getTime() });
+              default:
+                modal.open({ editDate: false });
+            }
+          }}
+        ></DateTimePicker>
+      )}
     </Modal>
   );
 }

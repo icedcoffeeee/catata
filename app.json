@@ -28,7 +28,59 @@
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
-    "plugins": ["expo-router", "expo-sqlite"],
+    "plugins": [
+      "expo-router",
+      "expo-sqlite",
+      [
+        "@react-native-community/datetimepicker",
+        {
+          "android": {
+            "datePicker": {
+              "colorAccent": {
+                "light": "#3b82f6ff",
+                "dark": "#3b82f6ff"
+              },
+              "colorControlActivated": {
+                "light": "#3b82f6ff",
+                "dark": "#3b82f6ff"
+              },
+              "colorControlHighlight": {
+                "light": "#e4e4e7ff",
+                "dark": "#27272aff"
+              },
+              "selectableItemBackgroundBorderless": {
+                "light": "#e4e4e7ff",
+                "dark": "#27272aff"
+              },
+              "textColor": {
+                "light": "#18181bff",
+                "dark": "#f4f4f5ff"
+              },
+              "textColorPrimary": {
+                "light": "#18181bff",
+                "dark": "#f4f4f5ff"
+              },
+              "textColorPrimaryInverse": {
+                "light": "#f4f4f5ff",
+                "dark": "#18181bff"
+              },
+              "textColorSecondary": {
+                "light": "#18181bcc",
+                "dark": "#f4f4f5cc"
+              },
+              "textColorSecondaryInverse": {
+                "light": "#f4f4f5cc",
+                "dark": "#18181bcc"
+              },
+              "windowBackground": {
+                "light": "#f4f4f5ff",
+                "dark": "#18181bff"
+              }
+            }
+          }
+        }
+      ]
+    ],
     "experiments": {
       "typedRoutes": true
     },
