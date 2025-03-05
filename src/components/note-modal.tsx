@@ -17,11 +17,10 @@ import { longDate } from "@/utils";
 import { create } from "zustand";
 import type { NoteI } from "@/db";
 import { NoteScope, NoteType, addNote, delNote } from "@/db";
-import DateTimePicker from "@react-native-community/datetimepicker";
+import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 
 type NoteModal = {
   shown: boolean;
-  editDate: boolean;
 
   note?: NoteI;
   parent?: NoteI;
@@ -55,7 +54,7 @@ const defaultModal = {
 export const useNoteModal = create<NoteModal>((set) => ({
   ...defaultModal,
 
-  open: (params) => set({ shown: true, editDate: false, ...params }),
+  open: (params) => set({ shown: true, ...params }),
   close: () => set({ ...defaultModal, shown: false }),
   clear: () => set({ ...defaultModal, shown: true }),
   set: (note) => set({ note }),
@@ -92,7 +91,20 @@ export function NoteModal() {
 
       <View style={stylesheet.container}>
         <View style={[styles.row, { justifyContent: "space-between" }]}>
-          <TouchableOpacity onPress={() => modal.open({ editDate: true })}>
+          <TouchableOpacity
+            onPress={() =>
+              DateTimePickerAndroid.open({
+                mode: "date",
+                value: new Date(note.time),
+                onChange: ({ type }, date) => {
+                  switch (type) {
+                    case "set":
+                      modal.open({ time: date?.getTime() });
+                  }
+                },
+              })
+            }
+          >
             <Text style={styles.mono}>{longDate(note.time)}</Text>
           </TouchableOpacity>
           <View style={styles.row}>
@@ -173,20 +185,6 @@ export function NoteModal() {
           </View>
         </View>
       </View>
-      {modal.editDate && (
-        <DateTimePicker
-          mode="date"
-          value={new Date(note.time)}
-          onChange={({ type }, date) => {
-            switch (type) {
-              case "set":
-                modal.open({ time: date?.getTime() });
-              default:
-                modal.open({ editDate: false });
-            }
-          }}
-        ></DateTimePicker>
-      )}
     </Modal>
   );
 }
