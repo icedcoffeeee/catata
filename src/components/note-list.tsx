@@ -10,7 +10,7 @@ import { FAGlyphs, FontAwesome } from "./icons";
 import { styles } from "@/styles";
 import { getFullMDY, getMDY } from "@/utils";
 import { useNoteModal } from "@/components/note-modal";
-import { NoteS, db, notesT } from "@/db";
+import { NoteS, db, notesT, toggleTodo } from "@/db";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 import { eq } from "drizzle-orm";
 
@@ -64,6 +64,7 @@ function NoteText({ note, date, fulldate }: NoteText) {
   return (
     <TouchableOpacity
       onPress={() => modal.open({ note, parent })}
+      onLongPress={() => toggleTodo(note)}
       style={[styles.row, { marginBottom: 5 }]}
     >
       {date && <Text style={styles.mono}>{day}:</Text>}

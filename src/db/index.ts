@@ -12,7 +12,9 @@ export const db = drizzle(expo_sqlite, { schema });
 
 export * from "./schema";
 
-export async function addNote(note?: schema.NoteI) {
+export async function addNote(
+  note?: schema.NoteI,
+): Promise<schema.NoteS | undefined> {
   if (!note) return;
   let parents;
   if (!note.id)
@@ -25,7 +27,16 @@ export async function addNote(note?: schema.NoteI) {
       .returning();
   return parents[0];
 }
+
 export async function delNote(note?: schema.NoteI) {
   if (!note || !note.id) return;
   else await db.delete(schema.notesT).where(eq(schema.notesT.id, note.id));
+}
+
+export async function toggleTodo(note: schema.NoteI) {
+  if (!note.id || note.type === schema.NoteType.NOTE) return;
+  await db
+    .update(schema.notesT)
+    .set({ type: (note.type % 2) + 1 })
+    .where(eq(schema.notesT.id, note.id));
 }
