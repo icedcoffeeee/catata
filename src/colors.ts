@@ -12,14 +12,14 @@ export const theme = {
     bg1: colors.zinc[900],
     bg2: colors.zinc[800],
     text: colors.zinc[100],
-    accent1: colors.blue[500],
+    accent1: colors.blue[700],
     accent2: colors.red[700],
   },
   light: {
     bg1: colors.zinc[100],
     bg2: colors.zinc[200],
     text: colors.zinc[900],
-    accent1: colors.blue[500],
+    accent1: colors.blue[300],
     accent2: colors.red[300],
   },
 };

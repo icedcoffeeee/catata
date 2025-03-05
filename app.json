@@ -37,20 +37,20 @@
           "android": {
             "datePicker": {
               "colorAccent": {
-                "light": "#ff3b82f6",
-                "dark": "#ff3b82f6"
+                "light": "#ff93c5fd",
+                "dark": "#ff1d4ed8"
               },
               "colorControlActivated": {
-                "light": "#ff3b82f6",
-                "dark": "#ff3b82f6"
+                "light": "#ff93c5fd",
+                "dark": "#ff1d4ed8"
               },
               "colorControlHighlight": {
                 "light": "#ffe4e4e7",
                 "dark": "#ff27272a"
               },
               "selectableItemBackgroundBorderless": {
-                "light": "#ffe4e4e7",
-                "dark": "#ff27272a"
+                "light": "#fff4f4f5",
+                "dark": "#ff18181b"
               },
               "textColor": {
                 "light": "#ff18181b",
@@ -61,16 +61,16 @@
                 "dark": "#fff4f4f5"
               },
               "textColorPrimaryInverse": {
-                "light": "#fff4f4f5",
-                "dark": "#ff18181b"
+                "light": "#ff18181b",
+                "dark": "#fff4f4f5"
               },
               "textColorSecondary": {
-                "light": "#cc18181b",
-                "dark": "#ccf4f4f5"
+                "light": "#7f18181b",
+                "dark": "#7ff4f4f5"
               },
               "textColorSecondaryInverse": {
-                "light": "#ccf4f4f5",
-                "dark": "#cc18181b"
+                "light": "#7f18181b",
+                "dark": "#7ff4f4f5"
               },
               "windowBackground": {
                 "light": "#fff4f4f5",

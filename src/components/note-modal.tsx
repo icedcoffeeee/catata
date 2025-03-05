@@ -150,7 +150,7 @@ export function NoteModal() {
         <View style={[styles.row, { justifyContent: "space-between" }]}>
           <Button
             icon="plus"
-            style={{ backgroundColor: colors.blue[500] }}
+            style={{ backgroundColor: colors.blue[700] }}
             onPress={async () => {
               const parent = await addNote(note);
               modal.clear();
