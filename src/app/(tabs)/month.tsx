@@ -8,7 +8,7 @@ import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 import { FlatList, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import colors from "tailwindcss/colors";
-import { eq } from "drizzle-orm";
+import { eq, or } from "drizzle-orm";
 
 export default function ThisMonthPage() {
   return <MonthPage date={new Date()}></MonthPage>;
@@ -26,7 +26,12 @@ export function MonthPage({ date }: { date: Date }) {
   const { M: fullMon, Y: fullYear } = getFullMDY(date.getTime());
 
   const { data: notes_ } = useLiveQuery(
-    db.select().from(notesT).where(eq(notesT.scope, NoteScope.MONTH)),
+    db
+      .select()
+      .from(notesT)
+      .where(
+        or(eq(notesT.scope, NoteScope.MONTH), eq(notesT.scope, NoteScope.YEAR)),
+      ),
   );
 
   const modal = useNoteModal();
