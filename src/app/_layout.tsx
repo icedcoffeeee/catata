@@ -6,7 +6,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
 import { useDrizzleStudio } from "expo-drizzle-studio-plugin";
 import { useFonts } from "expo-font";
-import { LinearGradient } from "expo-linear-gradient";
+import { LinearGradient, LinearGradientProps } from "expo-linear-gradient";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
@@ -47,33 +47,33 @@ export default function RootLayout() {
   if (!fontloaded && !DBsuccess) return null;
 
   return (
-    <LinearGradient
-      colors={[colors.zinc[950], colors.zinc[900], colors.zinc[950]]}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
-      style={{ flex: 1 }}
-    >
+    <LinearGradient {...bg_gradient}>
       <Stack
         screenOptions={{
           headerShown: false,
           headerTitleStyle: {
             fontFamily: "Karla_400Regular",
           },
-          navigationBarColor: colors.zinc[900],
-          contentStyle: { backgroundColor: "#00000000" },
+          headerStyle: { backgroundColor: colors.zinc[900] },
+          headerTintColor: colors.zinc[100],
+          navigationBarColor: colors.zinc[950],
+          contentStyle: { padding: 20, backgroundColor: colors.zinc[950] },
         }}
       >
-        <Stack.Screen name="(tabs)"></Stack.Screen>
         <Stack.Screen
-          name="settings"
+          name="(tabs)"
           options={{
-            title: "Settings",
-            headerShown: true,
-            headerStyle: { backgroundColor: colors.zinc[900] },
-            headerTintColor: colors.zinc[100],
-            navigationBarColor: colors.zinc[950],
-            contentStyle: { backgroundColor: colors.zinc[950] },
+            navigationBarColor: colors.zinc[900],
+            contentStyle: {
+              padding: 0,
+              backgroundColor: "#00000000",
+            },
           }}
+        ></Stack.Screen>
+        <Stack.Screen name="settings"></Stack.Screen>
+        <Stack.Screen
+          name="[year-month]"
+          options={{ contentStyle: { padding: 0 } }}
         ></Stack.Screen>
       </Stack>
       <StatusBar style="light"></StatusBar>
@@ -81,3 +81,10 @@ export default function RootLayout() {
     </LinearGradient>
   );
 }
+
+export const bg_gradient: LinearGradientProps = {
+  colors: [colors.zinc[950], colors.zinc[900], colors.zinc[950]],
+  start: { x: 0, y: 0 },
+  end: { x: 1, y: 1 },
+  style: { flex: 1 },
+};

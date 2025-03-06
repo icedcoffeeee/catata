@@ -1,11 +1,10 @@
-import { Text } from "@/components";
+import { SafeAreaView, Text } from "@/components";
 import { NotesList } from "@/components/note-list";
 import { db, notesT } from "@/db";
 import { styles } from "@/styles";
 import { getMDY, longDate } from "@/utils";
 import { and, gt, isNull, lt } from "drizzle-orm";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ThisDayPage() {
   const { M, D, Y } = getMDY(new Date().getTime());

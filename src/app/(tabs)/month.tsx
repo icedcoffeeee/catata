@@ -1,4 +1,4 @@
-import { Text } from "@/components";
+import { SafeAreaView, Text } from "@/components";
 import { useNoteModal } from "@/components/note-modal";
 import { NotesList } from "@/components/note-list";
 import { NoteScope, db, notesT } from "@/db";
@@ -6,9 +6,10 @@ import { styles } from "@/styles";
 import { getFullMDY, getMDY } from "@/utils";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 import { FlatList, TouchableOpacity, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import colors from "tailwindcss/colors";
 import { eq, or } from "drizzle-orm";
+import { Feather } from "@/components/icons";
+import { router } from "expo-router";
 
 export default function ThisMonthPage() {
   return <MonthPage date={new Date()}></MonthPage>;
@@ -16,7 +17,7 @@ export default function ThisMonthPage() {
 
 const weeks = "MTWTFSS";
 
-export function MonthPage({ date }: { date: Date }) {
+export function MonthPage({ date, back }: { date: Date; back?: boolean }) {
   const startWeek = new Date(1, date.getMonth(), 0).getDay();
   const dates = Array(new Date(1, date.getMonth() + 1, -1).getDate() + 1)
     .fill(0)
@@ -38,9 +39,16 @@ export function MonthPage({ date }: { date: Date }) {
 
   return (
     <SafeAreaView>
-      <Text style={styles.h1}>
-        {fullMon} {fullYear}
-      </Text>
+      <View style={styles.row}>
+        {back && (
+          <TouchableOpacity onPress={() => router.back()}>
+            <Feather name="chevron-left" size={20}></Feather>
+          </TouchableOpacity>
+        )}
+        <Text style={styles.h1}>
+          {fullMon} {fullYear}
+        </Text>
+      </View>
       <FlatList
         data={dates}
         contentContainerStyle={styles.scroll}
