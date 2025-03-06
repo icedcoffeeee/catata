@@ -1,11 +1,11 @@
-import { SafeAreaView, Text } from "@/components";
+import { SafeAreaView, Text, View } from "@/components";
 import { useNoteModal } from "@/components/note-modal";
 import { NotesList } from "@/components/note-list";
 import { NoteScope, db, notesT } from "@/db";
 import { styles } from "@/styles";
 import { getFullMDY, getMDY } from "@/utils";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
-import { FlatList, TouchableOpacity, View } from "react-native";
+import { FlatList, TouchableOpacity } from "react-native";
 import colors from "tailwindcss/colors";
 import { eq, or } from "drizzle-orm";
 import { Feather } from "@/components/icons";

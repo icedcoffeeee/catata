@@ -1,17 +1,18 @@
-import { SafeAreaView, Text } from "@/components";
+import { SafeAreaView, Text, View } from "@/components";
 import { NotesList } from "@/components/note-list";
 import { NoteScope, db, notesT } from "@/db";
 import { styles } from "@/styles";
 import { getFullMDY, getMDY } from "@/utils";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 import { useState } from "react";
-import { FlatList, TouchableOpacity, View } from "react-native";
+import { FlatList, TouchableOpacity } from "react-native";
 import colors from "tailwindcss/colors";
 import { eq } from "drizzle-orm";
 import { router } from "expo-router";
+import { Feather } from "@/components/icons";
 
 export default function YearPage() {
-  const [year, _setYear] = useState(new Date().getFullYear());
+  const [year, setYear] = useState(new Date().getFullYear());
   const months = Array(12)
     .fill("")
     .map((_, i) => getFullMDY(new Date(1, i + 1).getTime()).M);
@@ -22,9 +23,15 @@ export default function YearPage() {
 
   return (
     <SafeAreaView>
-      <TouchableOpacity>
+      <View style={[styles.row, { alignSelf: "center" }]}>
+        <TouchableOpacity onPress={() => setYear(year - 1)}>
+          <Feather name="chevron-left" size={20}></Feather>
+        </TouchableOpacity>
         <Text style={styles.h1}>{year}</Text>
-      </TouchableOpacity>
+        <TouchableOpacity onPress={() => setYear(year + 1)}>
+          <Feather name="chevron-right" size={20}></Feather>
+        </TouchableOpacity>
+      </View>
       <FlatList
         data={months}
         renderItem={({ item: month, index: mon }) => {
