@@ -8,7 +8,10 @@ export default function AnyMonthPage() {
   const [year, month] = search["year-month"].split("-").map((a) => parseInt(a));
 
   return (
-    <LinearGradient {...bg_gradient} style={{ padding: 20 }}>
+    <LinearGradient
+      {...bg_gradient}
+      style={[bg_gradient.style, { padding: 20 }]}
+    >
       <MonthPage date={new Date(year, month - 1)} back></MonthPage>
     </LinearGradient>
   );

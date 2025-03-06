@@ -55,8 +55,8 @@ export function MonthPage({ date, back }: { date: Date; back?: boolean }) {
         renderItem={({ item: date }) => {
           const notes = notes_
             .filter((n) => {
-              const { M, D } = getMDY(n.time);
-              return M === pageMon && D === date;
+              const { M, D, Y } = getMDY(n.time);
+              return Y === pageYear && M === pageMon && D === date;
             })
             .sort((a, b) => b.scope - a.scope);
           const weekday = weeks[(startWeek + date) % weeks.length];
