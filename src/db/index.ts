@@ -30,7 +30,8 @@ export async function addNote(
 
 export async function delNote(note?: schema.NoteI) {
   if (!note || !note.id) return;
-  else await db.delete(schema.notesT).where(eq(schema.notesT.id, note.id));
+  await db.delete(schema.notesT).where(eq(schema.notesT.id, note.id));
+  await db.delete(schema.notesT).where(eq(schema.notesT.parentID, note.id));
 }
 
 export async function toggleTodo(note: schema.NoteI) {
