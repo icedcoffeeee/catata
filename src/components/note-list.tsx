@@ -67,10 +67,12 @@ function NoteText({ note, date, fulldate }: NoteText) {
       onLongPress={() => toggleTodo(note)}
       style={[styles.row, { marginBottom: 5 }]}
     >
-      {date && <Text style={styles.mono}>{day}:</Text>}
+      {date && (
+        <Text style={styles.mono}>{day.toString().padStart(2, "0")}:</Text>
+      )}
       {fulldate && (
         <Text style={styles.mono}>
-          {fullMon} {day}:
+          {fullMon} {day.toString().padStart(2, "0")}:
         </Text>
       )}
       <FontAwesome
