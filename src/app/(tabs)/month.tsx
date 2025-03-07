@@ -76,7 +76,7 @@ export function MonthPage({ date, back }: { date: Date; back?: boolean }) {
                 onPress={() =>
                   modal.open({
                     time: new Date(pageYear, pageMon - 1, date).getTime(),
-                    scope: NoteScope.MONTH,
+                    scope: !back ? NoteScope.MONTH : NoteScope.YEAR,
                   })
                 }
               >
