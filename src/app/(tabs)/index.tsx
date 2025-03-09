@@ -3,7 +3,7 @@ import { NotesList } from "@/components/note-list";
 import { db, notesT } from "@/db";
 import { styles } from "@/styles";
 import { getMDY, longDate } from "@/utils";
-import { and, gt, isNull, lt } from "drizzle-orm";
+import { and, gte, isNull, lt } from "drizzle-orm";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 
 export default function ThisDayPage() {
@@ -22,7 +22,7 @@ export function DayNotes({ dayTime }: { dayTime: number }) {
         and(
           isNull(notesT.parentID),
           lt(notesT.time, dayTime + _24h),
-          gt(notesT.time, dayTime),
+          gte(notesT.time, dayTime),
         ),
       ),
   );
