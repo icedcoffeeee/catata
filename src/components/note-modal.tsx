@@ -158,7 +158,11 @@ export function NoteModal() {
             onPress={async () => {
               const parent = await addNote(note);
               modal.clear();
-              modal.open({ parent });
+              modal.open({
+                parent,
+                time: parent?.time ?? defaultNote.time,
+                scope: parent?.scope ?? defaultNote.scope,
+              });
             }}
             disabled={!note.text}
           >
@@ -184,7 +188,7 @@ export function NoteModal() {
               }}
               disabled={!note.text}
             >
-              Add {typeNote ? "note" : "todo"}
+              {selected ? "Update" : "Add"} {typeNote ? "note" : "todo"}
             </Button>
           </View>
         </View>
