@@ -66,11 +66,12 @@ export function NoteModal() {
   // ^^ pull out keyboard
 
   let { note: selected, parent, time, scope, ...modal } = useNoteModal();
-  const note: NoteI = selected ?? {
+  const note: NoteI = {
     ...defaultNote,
-    time: !!time ? time : defaultNote.time,
-    scope: !!scope ? scope : defaultNote.scope,
+    ...selected,
   };
+  if (time) note.time = time;
+  if (scope) note.scope = scope;
 
   const typeNote = note.type === NoteType.NOTE;
 
@@ -100,6 +101,9 @@ export function NoteModal() {
                   switch (type) {
                     case "set":
                       modal.open({ time: date?.getTime() });
+                      break;
+                    default:
+                      break;
                   }
                 },
               })
