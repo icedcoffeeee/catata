@@ -2,6 +2,7 @@ import { Text } from ".";
 import {
   FlatList,
   StyleProp,
+  StyleSheet,
   TouchableOpacity,
   View,
   ViewStyle,
@@ -13,6 +14,7 @@ import { useNoteModal } from "@/components/note-modal";
 import { NoteS, db, notesT, toggleTodo } from "@/db";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 import { eq } from "drizzle-orm";
+import colors from "tailwindcss/colors";
 
 type NotesList = {
   notes: NoteS[];
@@ -41,10 +43,12 @@ export function NotesList({
           <View style={style}>
             <NoteText note={n} date={dates} fulldate={fulldates}></NoteText>
             {!nochildren && (
-              <NotesList
-                notes={notes_.filter((a) => a.parentID === n.id)}
-                style={{ marginLeft: 15 }}
-              ></NotesList>
+              <View style={[styles.row, stylesheet.shifted]}>
+                <View style={stylesheet.line}></View>
+                <NotesList
+                  notes={notes_.filter((a) => a.parentID === n.id)}
+                ></NotesList>
+              </View>
             )}
           </View>
         );
@@ -86,3 +90,16 @@ function NoteText({ note, date, fulldate }: NoteText) {
     </TouchableOpacity>
   );
 }
+
+const stylesheet = StyleSheet.create({
+  shifted: {
+    alignItems: "center",
+    transform: [{ translateX: 4 }],
+  },
+  line: {
+    width: 2,
+    height: "100%",
+    backgroundColor: colors.zinc[100],
+    transform: [{ translateY: -2 }],
+  },
+});
