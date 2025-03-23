@@ -14,7 +14,7 @@ import { useNoteModal } from "@/components/note-modal";
 import { NoteS, db, notesT, toggleTodo } from "@/db";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 import { eq } from "drizzle-orm";
-import colors from "tailwindcss/colors";
+import { theme, useTheme } from "@/colors";
 
 type NotesList = {
   notes: NoteS[];
@@ -31,6 +31,7 @@ export function NotesList({
   nochildren,
   style,
 }: NotesList) {
+  const th = useTheme(({ th }) => th);
   const { data: notes_ } = useLiveQuery(db.select().from(notesT));
 
   return (
@@ -44,7 +45,9 @@ export function NotesList({
             <NoteText note={n} date={dates} fulldate={fulldates}></NoteText>
             {!nochildren && (
               <View style={[styles.row, stylesheet.shifted]}>
-                <View style={stylesheet.line}></View>
+                <View
+                  style={[stylesheet.line, { backgroundColor: theme[th].text }]}
+                ></View>
                 <NotesList
                   notes={notes_.filter((a) => a.parentID === n.id)}
                 ></NotesList>
@@ -99,7 +102,6 @@ const stylesheet = StyleSheet.create({
   line: {
     width: 2,
     height: "100%",
-    backgroundColor: colors.zinc[100],
     transform: [{ translateY: -2 }],
   },
 });
