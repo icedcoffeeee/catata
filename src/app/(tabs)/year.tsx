@@ -6,10 +6,10 @@ import { getFullMDY, getMDY } from "@/utils";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 import { useState } from "react";
 import { FlatList, TouchableOpacity } from "react-native";
-import colors from "tailwindcss/colors";
 import { eq } from "drizzle-orm";
 import { router } from "expo-router";
 import { Feather } from "@/components/icons";
+import { theme, useTheme } from "@/colors";
 
 export default function YearPage() {
   const [year, setYear] = useState(new Date().getFullYear());
@@ -17,6 +17,7 @@ export default function YearPage() {
     .fill("")
     .map((_, i) => getFullMDY(new Date(1, i + 1).getTime()).M);
 
+  const th = useTheme(({ th }) => th);
   const { data: notes_ } = useLiveQuery(
     db.select().from(notesT).where(eq(notesT.scope, NoteScope.YEAR)),
   );
@@ -44,7 +45,7 @@ export default function YearPage() {
               style={{
                 marginBottom: 15,
                 borderTopWidth: 1,
-                borderColor: colors.zinc[100],
+                borderColor: theme[th].text,
               }}
             >
               <TouchableOpacity

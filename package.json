@@ -1,7 +1,7 @@
 {
   "name": "catata",
   "main": "expo-router/entry",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
@@ -16,10 +16,12 @@
     "@expo-google-fonts/karla": "^0.2.3",
     "@expo/vector-icons": "^14.0.2",
     "@nozbe/microfuzz": "^1.0.0",
+    "@react-native-async-storage/async-storage": "1.23.1",
     "@react-native-community/datetimepicker": "8.2.0",
     "@react-navigation/native": "^7.0.14",
     "drizzle-orm": "^0.40.0",
     "expo": "~52.0.38",
+    "expo-application": "~6.0.2",
     "expo-dev-client": "~5.0.14",
     "expo-drizzle-studio-plugin": "^0.1.1",
     "expo-font": "~13.0.4",

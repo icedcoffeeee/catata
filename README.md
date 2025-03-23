@@ -40,8 +40,8 @@ Might be outdated.
 For `beta` release.
 
 - [x] Working search bar.
-- [ ] Working light mode.
-    - [ ] Streamline colors module.
+- [x] Working light mode.
+    - [x] Streamline colors module.
 - [ ] Changeable start of week and year (e.g. start of semester).
 
 ## Known Issues

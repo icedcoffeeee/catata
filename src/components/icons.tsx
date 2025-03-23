@@ -1,3 +1,4 @@
+import { theme, useTheme } from "@/colors";
 import {
   Ionicons as IoniconsRN,
   FontAwesome as FontAwesomeRN,
@@ -9,21 +10,26 @@ export function IonIcons({
   color,
   ...props
 }: IconProps<keyof typeof IoniconsRN.glyphMap>) {
-  return <IoniconsRN color={color ?? "white"} {...props}></IoniconsRN>;
+  const th = useTheme(({ th }) => th);
+  return <IoniconsRN color={color ?? theme[th].text} {...props}></IoniconsRN>;
 }
 
 export function FontAwesome({
   color,
   ...props
 }: IconProps<keyof typeof FontAwesomeRN.glyphMap>) {
-  return <FontAwesomeRN color={color ?? "white"} {...props}></FontAwesomeRN>;
+  const th = useTheme(({ th }) => th);
+  return (
+    <FontAwesomeRN color={color ?? theme[th].text} {...props}></FontAwesomeRN>
+  );
 }
 
 export function Feather({
   color,
   ...props
 }: IconProps<keyof typeof FeatherRN.glyphMap>) {
-  return <FeatherRN color={color ?? "white"} {...props}></FeatherRN>;
+  const th = useTheme(({ th }) => th);
+  return <FeatherRN color={color ?? theme[th].text} {...props}></FeatherRN>;
 }
 
 export type IonGlyphs = keyof typeof IoniconsRN.glyphMap;

@@ -6,10 +6,10 @@ import { styles } from "@/styles";
 import { getFullMDY, getMDY } from "@/utils";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 import { FlatList, TouchableOpacity } from "react-native";
-import colors from "tailwindcss/colors";
 import { eq, or } from "drizzle-orm";
 import { Feather } from "@/components/icons";
 import { router } from "expo-router";
+import { theme, useTheme } from "@/colors";
 
 export default function ThisMonthPage() {
   return <MonthPage date={new Date()}></MonthPage>;
@@ -18,6 +18,7 @@ export default function ThisMonthPage() {
 const weeks = "MTWTFSS";
 
 export function MonthPage({ date, back }: { date: Date; back?: boolean }) {
+  const th = useTheme(({ th }) => th);
   const startWeek = new Date(1, date.getMonth(), 0).getDay();
   const dates = Array(new Date(1, date.getMonth() + 1, -1).getDate() + 1)
     .fill(0)
@@ -68,7 +69,7 @@ export function MonthPage({ date, back }: { date: Date; back?: boolean }) {
                 {
                   marginTop: weekday == "M" ? 10 : 0,
                   borderTopWidth: weekday == "M" ? 1 : 0,
-                  borderColor: colors.zinc[100],
+                  borderColor: theme[th].text,
                 },
               ]}
             >
