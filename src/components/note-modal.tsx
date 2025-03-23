@@ -153,12 +153,13 @@ export function NoteModal() {
             icon="plus"
             style={{ backgroundColor: colors.blue[700] }}
             onPress={async () => {
-              const parent = await addNote(note);
+              note.parentID = parent?.id;
+              const newParent = await addNote(note);
               modal.clear();
               modal.open({
-                parent,
-                time: parent?.time ?? defaultNote.time,
-                scope: parent?.scope ?? defaultNote.scope,
+                parent: newParent,
+                time: newParent?.time ?? defaultNote.time,
+                scope: newParent?.scope ?? defaultNote.scope,
               });
             }}
             disabled={!note.text}
