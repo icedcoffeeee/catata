@@ -76,12 +76,10 @@ const stylesheet = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 15,
     borderRadius: 5,
-    //backgroundColor: colors.zinc[800],
     elevation: 5,
   },
   title: {
     borderTopWidth: 1,
-    //borderTopColor: colors.zinc[100],
     marginTop: 10,
     marginBottom: 10,
   },
