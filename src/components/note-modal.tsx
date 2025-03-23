@@ -185,6 +185,12 @@ export function NoteModal() {
                 note.parentID = parent?.id;
                 await addNote(note);
                 modal.clear();
+                if (parent)
+                  modal.open({
+                    parent,
+                    time: parent?.time ?? defaultNote.time,
+                    scope: parent?.scope ?? defaultNote.scope,
+                  });
               }}
               disabled={!note.text}
             >
