@@ -96,7 +96,7 @@ export default function RootLayout() {
           options={{ contentStyle: { padding: 0 } }}
         ></Stack.Screen>
       </Stack>
-      <StatusBar style="light"></StatusBar>
+      <StatusBar style={th === "light" ? "dark" : "light"}></StatusBar>
       <NoteModal></NoteModal>
     </LinearGradient>
   );

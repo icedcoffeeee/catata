@@ -47,7 +47,7 @@ export default function TabsLayout() {
       </Tabs>
       <TouchableOpacity
         onPress={() => modal.open({})}
-        style={stylesheet.addButton}
+        style={[stylesheet.addButton, { backgroundColor: theme[th].accent1 }]}
       >
         <Feather name="plus" size={20}></Feather>
       </TouchableOpacity>
@@ -76,6 +76,5 @@ const stylesheet = StyleSheet.create({
     width: 50,
     aspectRatio: 1 / 1,
     borderRadius: 10,
-    backgroundColor: colors.zinc[500],
   },
 });
