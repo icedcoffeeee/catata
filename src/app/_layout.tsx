@@ -1,4 +1,4 @@
-import { theme } from "@/colors";
+import { theme, useTheme } from "@/colors";
 import { NoteModal } from "@/components/note-modal";
 import { db, expo_sqlite } from "@/db";
 import migrations from "@/drizzle/migrations";
@@ -12,7 +12,7 @@ import { LinearGradient, LinearGradientProps } from "expo-linear-gradient";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 export { ErrorBoundary } from "expo-router";
 
@@ -32,7 +32,7 @@ export default function RootLayout() {
     ...FontAwesome.font,
   });
 
-  const [th, setTheme] = useState<keyof typeof theme>();
+  const { th, setTheme } = useTheme();
   useEffect(() => {
     (async () => {
       try {
@@ -65,7 +65,7 @@ export default function RootLayout() {
 
   return (
     <LinearGradient
-      colors={[theme[th!].bg1, theme[th!].bg2, theme[th!].bg1]}
+      colors={[theme[th].bg1, theme[th].bg2, theme[th].bg1]}
       {...bg_gradient}
     >
       <Stack
@@ -74,16 +74,16 @@ export default function RootLayout() {
           headerTitleStyle: {
             fontFamily: "Karla_400Regular",
           },
-          headerStyle: { backgroundColor: theme[th!].bg2 },
-          headerTintColor: theme[th!].text,
-          navigationBarColor: theme[th!].bg1,
-          contentStyle: { padding: 20, backgroundColor: theme[th!].bg1 },
+          headerStyle: { backgroundColor: theme[th].bg2 },
+          headerTintColor: theme[th].text,
+          navigationBarColor: theme[th].bg1,
+          contentStyle: { padding: 20, backgroundColor: theme[th].bg1 },
         }}
       >
         <Stack.Screen
           name="(tabs)"
           options={{
-            navigationBarColor: theme[th!].bg2,
+            navigationBarColor: theme[th].bg2,
             contentStyle: {
               padding: 0,
               backgroundColor: "#00000000",

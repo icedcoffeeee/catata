@@ -1,3 +1,4 @@
+import { theme, useTheme } from "@/colors";
 import { IonIcons, IonGlyphs, Feather } from "@/components/icons";
 import { useNoteModal } from "@/components/note-modal";
 import { Tabs } from "expo-router";
@@ -6,6 +7,7 @@ import colors from "tailwindcss/colors";
 
 export default function TabsLayout() {
   const modal = useNoteModal();
+  const th = useTheme(({ th }) => th);
 
   return (
     <>
@@ -13,10 +15,10 @@ export default function TabsLayout() {
         screenOptions={{
           sceneStyle: stylesheet.scene,
           headerShown: false,
-          tabBarStyle: stylesheet.tabBar,
+          tabBarStyle: { ...stylesheet.tabBar, backgroundColor: theme[th].bg2 },
           tabBarItemStyle: { paddingTop: 8 },
           tabBarLabelStyle: { fontFamily: "Karla_400Regular" },
-          tabBarActiveTintColor: colors.zinc[100],
+          tabBarActiveTintColor: theme[th].text,
           tabBarInactiveTintColor: colors.zinc[500],
         }}
       >
@@ -64,7 +66,6 @@ const stylesheet = StyleSheet.create({
     borderTopWidth: 0,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    backgroundColor: colors.zinc[900],
   },
   addButton: {
     position: "absolute",

@@ -1,4 +1,5 @@
 import colors from "tailwindcss/colors";
+import { create } from "zustand";
 
 /** color = rrggbb, opacity = 0 -- 1 */
 export const rgba_a = (color: string, opacity: number, argb?: boolean) => {
@@ -23,3 +24,12 @@ export const theme = {
     accent2: colors.red[300],
   },
 };
+
+type ThemeState = {
+  th: keyof typeof theme;
+  setTheme: (th: keyof typeof theme) => void;
+};
+export const useTheme = create<ThemeState>((set) => ({
+  th: "dark",
+  setTheme: (th) => set({ th }),
+}));
