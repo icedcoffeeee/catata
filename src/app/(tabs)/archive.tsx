@@ -1,16 +1,18 @@
 import { SafeAreaView, Text, TextInput, View } from "@/components";
-import { IonIcons } from "@/components/icons";
 import { NotesList } from "@/components/note-list";
 import { db, notesT } from "@/db";
 import { styles } from "@/styles";
 import { getMDY, groupArr, longDate } from "@/utils";
+import { useFuzzySearchList } from "@nozbe/microfuzz/react";
 import { and, isNull, lt } from "drizzle-orm";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
-import { FlatList, StyleSheet, TouchableOpacity } from "react-native";
+import { useState } from "react";
+import { FlatList, StyleSheet } from "react-native";
 import colors from "tailwindcss/colors";
 
 export default function ArchivePage() {
   const { M, D, Y } = getMDY(new Date().getTime());
+  const [searched, setSearched] = useState<string>("");
 
   const { data: notes_ } = useLiveQuery(
     db
@@ -24,8 +26,15 @@ export default function ArchivePage() {
       ),
   );
 
+  const fuzzy = useFuzzySearchList({
+    list: notes_,
+    queryText: searched,
+    getText: (item) => [longDate(item.time), item.text],
+    mapResultItem: ({ item }) => ({ ...item }),
+  });
+
   const groupedArr = groupArr(
-    notes_.sort((a, b) => b.time - a.time),
+    fuzzy.sort((a, b) => b.time - a.time),
     ({ time }) => longDate(time),
   );
 
@@ -35,10 +44,8 @@ export default function ArchivePage() {
         <TextInput
           placeholder="Search"
           style={stylesheet.searchInput}
+          onChangeText={setSearched}
         ></TextInput>
-        <TouchableOpacity style={stylesheet.searchButton}>
-          <IonIcons name="search" size={15} color={colors.zinc[950]}></IonIcons>
-        </TouchableOpacity>
       </View>
       <FlatList
         data={Object.entries(groupedArr)}

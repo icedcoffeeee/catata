@@ -33,15 +33,16 @@ Might be outdated.
    - Any notes/tasks added here automatically appears in the daily page
      on the day of.
 3. You can see notes on previous days in the 'Archive' page.
-3. All unfinished taskes appear in the 'Todos' page
+    - You can also search for any note by text or date.
+4. All unfinished taskes appear in the 'Todos' page
 
 ## TODO
 For `beta` release.
 
-- Working search bar.
-- Working light mode.
-    - Streamline colors module.
-- Changeable start of week and year (e.g. start of semester).
+- [x] Working search bar.
+- [ ] Working light mode.
+    - [ ] Streamline colors module.
+- [ ] Changeable start of week and year (e.g. start of semester).
 
 ## Known Issues
 
