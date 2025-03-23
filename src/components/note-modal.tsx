@@ -66,10 +66,7 @@ export function NoteModal() {
   // ^^ pull out keyboard
 
   let { note: selected, parent, time, scope, ...modal } = useNoteModal();
-  const note: NoteI = {
-    ...defaultNote,
-    ...selected,
-  };
+  const note: NoteI = { ...defaultNote, ...selected };
   if (time) note.time = time;
   if (scope) note.scope = scope;
 
@@ -145,7 +142,7 @@ export function NoteModal() {
           <TextInput
             ref={input}
             placeholder={`New ${typeNote ? "note" : "todo"}...`}
-            value={note?.text}
+            defaultValue={note?.text}
             onChangeText={(text) => modal.set({ ...note, text })}
             multiline
           ></TextInput>
@@ -194,7 +191,7 @@ export function NoteModal() {
               }}
               disabled={!note.text}
             >
-              {selected ? "Update" : "Add"} {typeNote ? "note" : "todo"}
+              {selected?.id ? "Update" : "Add"} {typeNote ? "note" : "todo"}
             </Button>
           </View>
         </View>
