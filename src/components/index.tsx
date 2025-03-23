@@ -27,11 +27,16 @@ export const TextInput = forwardRef(function (
   { style, ...props }: TextInputProps,
   ref: Ref<TextInputRN>,
 ) {
+  const th = useTheme(({ th }) => th);
   return (
     <TextInputRN
       ref={ref}
       placeholderTextColor={colors.zinc[500]}
-      style={[stylesheet.text, { paddingVertical: 15 }, style]}
+      style={[
+        stylesheet.text,
+        { color: theme[th].text, paddingVertical: 15 },
+        style,
+      ]}
       {...props}
     ></TextInputRN>
   );
