@@ -1,3 +1,4 @@
+import { theme, useTheme } from "@/colors";
 import { Ref, forwardRef } from "react";
 import type { TextInputProps, TextProps } from "react-native";
 import {
@@ -11,8 +12,12 @@ export { View } from "react-native";
 export { SafeAreaView } from "react-native-safe-area-context";
 
 export function Text({ children, style, ...props }: TextProps) {
+  const th = useTheme(({ th }) => th);
   return (
-    <TextRN style={[stylesheet.text, style]} {...props}>
+    <TextRN
+      style={[stylesheet.text, { color: theme[th].text }, style]}
+      {...props}
+    >
       {children}
     </TextRN>
   );
@@ -33,5 +38,5 @@ export const TextInput = forwardRef(function (
 });
 
 const stylesheet = StyleSheet.create({
-  text: { color: colors.zinc[100], fontFamily: "Karla_400Regular" },
+  text: { fontFamily: "Karla_400Regular" },
 });
