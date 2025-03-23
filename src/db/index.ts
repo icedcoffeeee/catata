@@ -31,7 +31,18 @@ export async function addNote(
 export async function delNote(note?: schema.NoteI) {
   if (!note || !note.id) return;
   await db.delete(schema.notesT).where(eq(schema.notesT.id, note.id));
-  await db.delete(schema.notesT).where(eq(schema.notesT.parentID, note.id));
+  let subnotes = await db
+    .delete(schema.notesT)
+    .where(eq(schema.notesT.parentID, note.id))
+    .returning();
+  for (const note of subnotes) {
+    subnotes.push(
+      ...(await db
+        .delete(schema.notesT)
+        .where(eq(schema.notesT.parentID, note.id))
+        .returning()),
+    );
+  }
 }
 
 export async function toggleTodo(note: schema.NoteI) {
