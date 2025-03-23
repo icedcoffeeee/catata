@@ -1,13 +1,13 @@
 # catata
 
 > [!NOTE]
-> currently in alpha.
+> Currently in `alpha`.
 
-local android note-planner app based on [Ryder Carroll bullet
+Local android note-planner app based on [Ryder Carroll bullet
 journaling](https://www.youtube.com/watch?v=GfRf43JTqY4) method.
 
-### screenshots:
-might be outdated.
+### Screenshots:
+Might be outdated.
 
 <p float="left">
     <img width="30%" src="./assets/screenshots/ss1.png">
@@ -17,19 +17,37 @@ might be outdated.
     <img width="30%" src="./assets/screenshots/ss5.png">
 </p>
 
+## Usage
+1. Any notes or tasks that come up today, can be added through the 'Add'
+   button.
+   - You can change the date, toggle the type: `note/task`, scope:
+     `day/month/year`, as well as add a subnote to the currently editing
+     note.
+   - Deletion will cascade to all the children.
+
+> [!CAUTION]
+> Deletion is permanent and does not ask for confirmation.
+
+2. Any plans in the upcoming month or year can be added by pressing the
+   corresponding date in both the 'Month' and 'Year' page.
+   - Any notes/tasks added here automatically appears in the daily page
+     on the day of.
+3. You can see notes on previous days in the 'Archive' page.
+3. All unfinished taskes appear in the 'Todos' page
+
 ## TODO
-for beta release.
+For `beta` release.
 
-- working search bar.
-- working light mode.
-    - streamline colors module.
-- changeable start of week and year (e.g. start of semester).
+- Working search bar.
+- Working light mode.
+    - Streamline colors module.
+- Changeable start of week and year (e.g. start of semester).
 
-## known issues
+## Known Issues
 
 - `NoteModal` rerenders text input on change.
 
-## building
+## Building
 
 ```
 bunx expo prebuild -p android
@@ -37,7 +55,7 @@ cd android
 ./gradlew assemble
 ```
 
-## working dir
+## Working Dir
 
 ```
 src/
@@ -63,5 +81,5 @@ src/
 app.json                  // app config
 eas.json                  // eas config
 Makefile                  // eas commands
-genconfig.ts              // generate app config
+genconfig.ts              // generates app config
 ```
