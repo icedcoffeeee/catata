@@ -40,17 +40,21 @@ export function NotesList({
       contentContainerStyle={styles.scroll}
       keyExtractor={(n) => n.id.toString()}
       renderItem={({ item: n }) => {
+        const notes = notes_.filter((a) => a.parentID === n.id);
         return (
           <View style={style}>
             <NoteText note={n} date={dates} fulldate={fulldates}></NoteText>
-            {!nochildren && (
-              <View style={[styles.row, stylesheet.shifted]}>
-                <View
-                  style={[stylesheet.line, { backgroundColor: theme[th].text }]}
-                ></View>
-                <NotesList
-                  notes={notes_.filter((a) => a.parentID === n.id)}
-                ></NotesList>
+            {!nochildren && !!notes.length && (
+              <View style={[styles.row, { marginLeft: 20 }]}>
+                {
+                  <View
+                    style={[
+                      stylesheet.line,
+                      { backgroundColor: theme[th].text },
+                    ]}
+                  ></View>
+                }
+                <NotesList notes={notes}></NotesList>
               </View>
             )}
           </View>
@@ -84,24 +88,19 @@ function NoteText({ note, date, fulldate }: NoteText) {
       )}
       <FontAwesome
         name={
-          ["circle" as FAGlyphs, "circle-thin", "check-circle"][
-            note.type
-          ] as FAGlyphs
+          (["circle", "circle-thin", "check-circle"] as FAGlyphs[])[note.type]
         }
       ></FontAwesome>
-      <Text style={{ flexShrink: 1 }}>{note.text}</Text>
+      <Text style={{ width: "90%" }}>{note.text}</Text>
     </TouchableOpacity>
   );
 }
 
 const stylesheet = StyleSheet.create({
-  shifted: {
-    alignItems: "center",
-    transform: [{ translateX: 4 }],
-  },
   line: {
+    position: "absolute",
     width: 2,
     height: "100%",
-    transform: [{ translateY: -2 }],
+    transform: [{ translateY: -2 }, { translateX: -16 }],
   },
 });
