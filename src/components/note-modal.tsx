@@ -108,21 +108,45 @@ export function NoteModal() {
               })
             }
           >
-            <Text style={styles.mono}>{longDate(note.time)}</Text>
+            <Text
+              style={{
+                borderBottomWidth: 1,
+                borderBottomColor: theme[th].text,
+                borderStyle: "dashed",
+              }}
+            >
+              {longDate(note.time)}
+            </Text>
           </TouchableOpacity>
           <View style={styles.row}>
             <TouchableOpacity
               onPress={() => modal.set({ ...note, type: (note.type + 1) % 2 })}
             >
-              <Text>{typeNote ? "Note" : "Todo"}</Text>
+              <Text
+                style={{
+                  borderBottomWidth: 1,
+                  borderBottomColor: theme[th].text,
+                  borderStyle: "dashed",
+                }}
+              >
+                {typeNote ? "Note" : "Todo"}
+              </Text>
             </TouchableOpacity>
-            <Feather name="minus"></Feather>
+            <Text>/</Text>
             <TouchableOpacity
               onPress={() =>
                 modal.set({ ...note, scope: (note.scope + 1) % 3 })
               }
             >
-              <Text>{["Day", "Month", "Year"][note.scope]}</Text>
+              <Text
+                style={{
+                  borderBottomWidth: 1,
+                  borderBottomColor: theme[th].text,
+                  borderStyle: "dashed",
+                }}
+              >
+                {["Day", "Month", "Year"][note.scope]}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -146,6 +170,7 @@ export function NoteModal() {
             placeholder={`New ${typeNote ? "note" : "todo"}...`}
             defaultValue={note?.text}
             onChangeText={(text) => modal.set({ ...note, text })}
+            style={{ width: "95%" }}
             multiline
           ></TextInput>
         </View>
