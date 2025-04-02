@@ -12,12 +12,12 @@ import {
 import { Text, TextInput } from ".";
 import { FGlyphs, Feather, FontAwesome, IonIcons } from "./icons";
 import { styles } from "@/styles";
-import colors from "tailwindcss/colors";
 import { longDate } from "@/utils";
 import { create } from "zustand";
 import type { NoteI } from "@/db";
 import { NoteScope, NoteType, addNote, delNote } from "@/db";
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
+import { theme, useTheme } from "@/colors";
 
 type NoteModal = {
   shown: boolean;
@@ -65,6 +65,8 @@ export function NoteModal() {
   setTimeout(() => input.current?.focus(), 100);
   // ^^ pull out keyboard
 
+  const th = useTheme(({ th }) => th);
+
   let { note: selected, parent, time, scope, ...modal } = useNoteModal();
   const note: NoteI = { ...defaultNote, ...selected };
   if (time) note.time = time;
@@ -87,7 +89,7 @@ export function NoteModal() {
         <Pressable onPress={modal.close} style={styles.modal}></Pressable>
       </LinearGradient>
 
-      <View style={stylesheet.container}>
+      <View style={[stylesheet.container, { backgroundColor: theme[th].bg2 }]}>
         <View style={[styles.row, { justifyContent: "space-between" }]}>
           <TouchableOpacity
             onPress={() =>
@@ -106,21 +108,45 @@ export function NoteModal() {
               })
             }
           >
-            <Text style={styles.mono}>{longDate(note.time)}</Text>
+            <Text
+              style={{
+                borderBottomWidth: 1,
+                borderBottomColor: theme[th].text,
+                borderStyle: "dashed",
+              }}
+            >
+              {longDate(note.time)}
+            </Text>
           </TouchableOpacity>
           <View style={styles.row}>
             <TouchableOpacity
               onPress={() => modal.set({ ...note, type: (note.type + 1) % 2 })}
             >
-              <Text>{typeNote ? "Note" : "Todo"}</Text>
+              <Text
+                style={{
+                  borderBottomWidth: 1,
+                  borderBottomColor: theme[th].text,
+                  borderStyle: "dashed",
+                }}
+              >
+                {typeNote ? "Note" : "Todo"}
+              </Text>
             </TouchableOpacity>
-            <Feather name="minus"></Feather>
+            <Text>/</Text>
             <TouchableOpacity
               onPress={() =>
                 modal.set({ ...note, scope: (note.scope + 1) % 3 })
               }
             >
-              <Text>{["Day", "Month", "Year"][note.scope]}</Text>
+              <Text
+                style={{
+                  borderBottomWidth: 1,
+                  borderBottomColor: theme[th].text,
+                  borderStyle: "dashed",
+                }}
+              >
+                {["Day", "Month", "Year"][note.scope]}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -144,6 +170,7 @@ export function NoteModal() {
             placeholder={`New ${typeNote ? "note" : "todo"}...`}
             defaultValue={note?.text}
             onChangeText={(text) => modal.set({ ...note, text })}
+            style={{ width: "95%" }}
             multiline
           ></TextInput>
         </View>
@@ -151,7 +178,7 @@ export function NoteModal() {
         <View style={[styles.row, { justifyContent: "space-between" }]}>
           <Button
             icon="plus"
-            style={{ backgroundColor: colors.blue[700] }}
+            style={{ backgroundColor: theme[th].accent1 }}
             onPress={async () => {
               note.parentID = parent?.id;
               const newParent = await addNote(note);
@@ -207,12 +234,14 @@ function Button({
   style,
   ...props
 }: TouchableOpacityProps & { icon: FGlyphs }) {
+  const th = useTheme(({ th }) => th);
   const note = useNoteModal((n) => n.note);
   return (
     <TouchableOpacity
       style={[
         styles.row,
         stylesheet.button,
+        { backgroundColor: theme[th].accent2 },
         { opacity: !!note?.text ? 1 : 0.4 },
         style,
       ]}
@@ -232,7 +261,6 @@ const stylesheet = StyleSheet.create({
     padding: 20,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    backgroundColor: colors.zinc[900],
     elevation: 5,
   },
   button: {
@@ -240,6 +268,5 @@ const stylesheet = StyleSheet.create({
     paddingVertical: 2,
     paddingHorizontal: 4,
     borderRadius: 5,
-    backgroundColor: colors.red[700],
   },
 });

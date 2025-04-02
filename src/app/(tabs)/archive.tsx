@@ -1,3 +1,4 @@
+import { theme, useTheme } from "@/colors";
 import { SafeAreaView, Text, TextInput, View } from "@/components";
 import { NotesList } from "@/components/note-list";
 import { db, notesT } from "@/db";
@@ -8,11 +9,11 @@ import { and, isNull, lt } from "drizzle-orm";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 import { useState } from "react";
 import { FlatList, StyleSheet } from "react-native";
-import colors from "tailwindcss/colors";
 
 export default function ArchivePage() {
   const { M, D, Y } = getMDY(new Date().getTime());
   const [searched, setSearched] = useState<string>("");
+  const th = useTheme(({ th }) => th);
 
   const { data: notes_ } = useLiveQuery(
     db
@@ -43,7 +44,7 @@ export default function ArchivePage() {
       <View style={[styles.row, { alignItems: "center", marginBottom: 15 }]}>
         <TextInput
           placeholder="Search"
-          style={stylesheet.searchInput}
+          style={[stylesheet.searchInput, { backgroundColor: theme[th].bg3 }]}
           onChangeText={setSearched}
         ></TextInput>
       </View>
@@ -52,7 +53,15 @@ export default function ArchivePage() {
         renderItem={({ item: [date, notes] }) => {
           return (
             <>
-              <Text style={[styles.mono, stylesheet.title]}>{date}</Text>
+              <Text
+                style={[
+                  styles.mono,
+                  stylesheet.title,
+                  { borderTopColor: theme[th].text },
+                ]}
+              >
+                {date}
+              </Text>
               <NotesList notes={notes}></NotesList>
             </>
           );
@@ -67,20 +76,10 @@ const stylesheet = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 15,
     borderRadius: 5,
-    backgroundColor: colors.zinc[800],
     elevation: 5,
-  },
-  searchButton: {
-    justifyContent: "center",
-    alignItems: "center",
-    width: 40,
-    aspectRatio: 1,
-    borderRadius: 100,
-    backgroundColor: colors.zinc[100],
   },
   title: {
     borderTopWidth: 1,
-    borderTopColor: colors.zinc[100],
     marginTop: 10,
     marginBottom: 10,
   },
